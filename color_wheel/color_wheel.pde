@@ -2,6 +2,10 @@ int circle_outer_radius = 150;
 int circle_inner_radius = 100;
 int picker_size = circle_outer_radius * 2;
 
+int brightness_scale_x = 100;
+int brightness_scale_y = 400;
+int brightness_scale_height = 40;
+
 float lumosity = 300;
 float max_lumosity = 300;
 
@@ -55,10 +59,10 @@ void draw() {
   drawColorDisplay(currentColor);
 }
 
-int ruleOfThree(float value, float oldMax, int newMax) {
+float ruleOfThree(float value, float oldMax, float newMax) {
   // e.g. oldMax   1       value 0.5
   //      newMax 255 -> newValue 128
-  int newValue = (int)((value / oldMax) * newMax);
+  float newValue = ((value / oldMax) * newMax);
   return newValue;
 }
 
@@ -66,7 +70,7 @@ void mouseInteraction()
 {
   if (mousePressed) {
     if (mouseY > 390) {
-      lumosity = constrain((mouseX - 100), 0, max_lumosity);
+      lumosity = constrain((mouseX - brightness_scale_x), 0, max_lumosity);
     } else {
       if (dist(mouseX, mouseY, 250, 200) < 150) {
         picked_color[0] = mouseX;
@@ -92,19 +96,40 @@ void drawColorDisplay(color currentColor)
 void drawLumosityPicker()
 {
   // draw brightness scale
-  int scale_x = 100;
-  int scale_y = 400;
-  int scale_height = 40;
   for (int lumosity_line = 0; lumosity_line < max_lumosity; lumosity_line++) {
     stroke(0, 0, lumosity_line);
-    line(scale_x + lumosity_line, scale_y, scale_x + lumosity_line, scale_y + scale_height);
+    line(brightness_scale_x + lumosity_line,
+         brightness_scale_y, 
+         brightness_scale_x + lumosity_line,
+         brightness_scale_y + brightness_scale_height);
   }
   
   // indicator for current lumosity
-  line(scale_x + lumosity, scale_y - 2, scale_x + lumosity,  scale_y + scale_height + 2);
+  line(brightness_scale_x + lumosity,
+       brightness_scale_y - 2,
+       brightness_scale_x + lumosity,
+       brightness_scale_y + brightness_scale_height + 2);
 }
 
-void drawColorPicker() { 
+void drawColorPicker()
+{
+  picker.beginDraw();
+  picker.colorMode(HSB, TWO_PI, 1, max_lumosity);
+  
+  for (int x = 0; x < picker_size; x++) {
+    float offset = PI*-1;
+    float hue = ruleOfThree(x, picker_size, TWO_PI);
+    hue = hue + offset;
+    float saturation = 1;
+    
+    picker.stroke(hue, saturation, max_lumosity);
+    picker.line(x, 0, x, picker_size); // way faster than point
+  }
+  
+  picker.endDraw();
+}
+
+void drawColorPicker_() { 
   picker.beginDraw();
   picker.colorMode(HSB, TWO_PI, 1, max_lumosity);
 
