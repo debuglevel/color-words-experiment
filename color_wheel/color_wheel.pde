@@ -120,6 +120,7 @@ void drawColorPicker()
     float offset = PI*-1;
     float hue = ruleOfThree(x, picker_size, TWO_PI);
     hue = hue + offset;
+    hue = wrap_hue(hue);
     float saturation = 1;
     
     picker.stroke(hue, saturation, max_lumosity);
@@ -127,6 +128,30 @@ void drawColorPicker()
   }
   
   picker.endDraw();
+}
+
+float wrap_hue(float hue)
+{
+  if (hue < 0)
+  {
+    while (hue < 0)
+    {
+      hue += TWO_PI;
+      return hue;
+    }
+  }
+  else if (hue > TWO_PI)
+  {
+    while (hue > TWO_PI)
+    {
+      hue -= TWO_PI;
+      return hue;
+    }
+  }
+  else
+  {
+    return hue;
+  }
 }
 
 void drawColorPicker_() { 
