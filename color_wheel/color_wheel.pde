@@ -38,6 +38,7 @@ void draw() {
     drawPicker();
   }
 
+  // draw brightness scale
   for (int a = 0; a < 300; a++) {
     stroke(0, 0, a);
     line(a + 100, 400, a + 100, 440);
@@ -51,8 +52,9 @@ void draw() {
   text("R: " + ruleOfThree(red(col),       TWO_PI, 255), 400, 50);
   text("G: " + ruleOfThree(green(col),        150, 255), 400, 60);
   text("B: " + ruleOfThree(blue(col),         300, 255), 400, 70);
+  
   text("S: " + ruleOfThree(saturation(col),   150, 255), 400, 90);
-  text("V: " + ruleOfThree(brightness((col)), 300, 255), 400, 100);
+  text("B: " + ruleOfThree(brightness((col)), 300, 255), 400, 100);
 
   rect(picked[0], picked[1], 4, 4);
 
@@ -61,6 +63,8 @@ void draw() {
 }
 
 int ruleOfThree(float value, float oldMax, int newMax) {
+  // e.g. oldMax   1       value 0.5
+  //      newMax 255 -> newValue 128
   int newValue = (int)((value / oldMax) * newMax);
   return newValue;
 }
@@ -71,7 +75,10 @@ void drawPicker() {
 
   for (int x = 0; x < 300; x++) {
     for (int y = 0; y < 300; y++) {
+      // calulcate saturation by distance from the middle
       float saturation = dist(x, y, 150, 150);
+	  
+      // if saturation (i.e. the distance) is less than 150 (i.e. the end of the circle), paint something
       if (saturation < 150) {
         float hue = atan2(150 - y, 150 - x) + PI;
         picker.stroke(hue, saturation, lumosity);
