@@ -1,10 +1,18 @@
+int circle_outer_radius = 150;
+int circle_inner_radius = 100;
+int picker_size = circle_outer_radius * 2;
+
 float lumosity = 300;
+float max_lumosity = 300;
+
+int max_saturation = 150;
+
 PFont font;
-int[] picked;
+int[] picked_color;
 PGraphics picker;
 
 void setup() {
-  colorMode(HSB, TWO_PI, 150, 300);
+  colorMode(HSB, TWO_PI, max_saturation, max_lumosity);
   size(500, 500);
   background(0);
 
@@ -13,12 +21,13 @@ void setup() {
 
   rectMode(CENTER);
   noFill();
-  picked = new int[2];
-  picked[0] = 250;
-  picked[1] = 200;
+  
+  picked_color = new int[2];
+  picked_color[0] = 250;
+  picked_color[1] = 200;
 
-  picker = createGraphics(300, 300);
-  drawPicker();
+  picker = createGraphics(picker_size, picker_size);
+  drawColorPicker();
 }
 
 void draw() {
@@ -26,40 +35,24 @@ void draw() {
   background(0);
   image(picker, 100, 50);
 
-  if (mousePressed) {
-    if (mouseY > 390) {
-      lumosity = constrain((mouseX - 100), 0, 300);
-    } else {
-      if (dist(mouseX, mouseY, 250, 200) < 150) {
-        picked[0] = mouseX;
-        picked[1] = mouseY;
-      }
-    }
-    drawPicker();
-  }
+  mouseInteraction();
 
-  // draw brightness scale
-  for (int a = 0; a < 300; a++) {
-    stroke(0, 0, a);
-    line(a + 100, 400, a + 100, 440);
-  }
-
-  line(lumosity + 100, 398, lumosity + 100, 442);
-  color col = get(picked[0], picked[1]);
+  drawLumosityPicker();
+  
+  
+  color currentColor = get(picked_color[0], picked_color[1]);
 
   fill(0, 0, 255);
 
-  text("R: " + ruleOfThree(red(col),       TWO_PI, 255), 400, 50);
-  text("G: " + ruleOfThree(green(col),        150, 255), 400, 60);
-  text("B: " + ruleOfThree(blue(col),         300, 255), 400, 70);
+  text("R: " + ruleOfThree(red(currentColor),       TWO_PI, 255), 400, 50);
+  text("G: " + ruleOfThree(green(currentColor),        150, 255), 400, 60);
+  text("B: " + ruleOfThree(blue(currentColor),         300, 255), 400, 70);
   
-  text("S: " + ruleOfThree(saturation(col),   150, 255), 400, 90);
-  text("B: " + ruleOfThree(brightness((col)), 300, 255), 400, 100);
+  text("S: " + ruleOfThree(saturation(currentColor),   150, 255), 400, 90);
+  text("B: " + ruleOfThree(brightness(currentColor),   300, 255), 400, 100);
 
-  rect(picked[0], picked[1], 4, 4);
-
-  fill(col);
-  rect(420, 330, 40, 40);
+  drawColorIndicator();
+  drawColorDisplay(currentColor);
 }
 
 int ruleOfThree(float value, float oldMax, int newMax) {
@@ -69,19 +62,63 @@ int ruleOfThree(float value, float oldMax, int newMax) {
   return newValue;
 }
 
-void drawPicker() { 
-  picker.beginDraw();
-  picker.colorMode(HSB, TWO_PI, 150, 300);
+void mouseInteraction()
+{
+  if (mousePressed) {
+    if (mouseY > 390) {
+      lumosity = constrain((mouseX - 100), 0, max_lumosity);
+    } else {
+      if (dist(mouseX, mouseY, 250, 200) < 150) {
+        picked_color[0] = mouseX;
+        picked_color[1] = mouseY;
+      }
+    }
+    
+    drawColorPicker();
+  }
+}
 
-  for (int x = 0; x < 300; x++) {
-    for (int y = 0; y < 300; y++) {
+void drawColorIndicator()
+{
+  rect(picked_color[0], picked_color[1], 5, 5);
+}
+
+void drawColorDisplay(color currentColor)
+{
+  fill(currentColor);
+  rect(420, 330, 40, 40);
+}
+
+void drawLumosityPicker()
+{
+  // draw brightness scale
+  int scale_x = 100;
+  int scale_y = 400;
+  int scale_height = 40;
+  for (int lumosity_line = 0; lumosity_line < max_lumosity; lumosity_line++) {
+    stroke(0, 0, lumosity_line);
+    line(scale_x + lumosity_line, scale_y, scale_x + lumosity_line, scale_y + scale_height);
+  }
+  
+  // indicator for current lumosity
+  line(scale_x + lumosity, scale_y - 2, scale_x + lumosity,  scale_y + scale_height + 2);
+}
+
+void drawColorPicker() { 
+  picker.beginDraw();
+  picker.colorMode(HSB, TWO_PI, 1, max_lumosity);
+
+  for (int x = 0; x < picker_size; x++) {
+    for (int y = 0; y < picker_size; y++) {
       // calulcate saturation by distance from the middle
-      float saturation = dist(x, y, 150, 150);
+      float distance = dist(x, y, circle_outer_radius, circle_outer_radius);
 	  
-      // if saturation (i.e. the distance) is less than 150 (i.e. the end of the circle), paint something
-      if (saturation < 150) {
+      // if the distance between inner and outer circle radius, paint the circle
+      if (distance < circle_outer_radius && distance > circle_inner_radius) {
         float hue = atan2(150 - y, 150 - x) + PI;
-        picker.stroke(hue, saturation, lumosity);
+        float saturation = 1;
+
+        picker.stroke(hue, saturation, max_lumosity);
         picker.point(x, y);
       }
     }
