@@ -11,6 +11,8 @@ float max_lumosity = 300;
 
 int max_saturation = 150;
 
+float offset = 0;
+
 PFont font;
 int[] picked_color;
 PGraphics picker;
@@ -54,6 +56,8 @@ void draw() {
   
   text("S: " + ruleOfThree(saturation(currentColor),   150, 255), 400, 90);
   text("B: " + ruleOfThree(brightness(currentColor),   300, 255), 400, 100);
+  
+  text("DBG: " + offset,                                  400, 130);
 
   drawColorIndicator();
   drawColorDisplay(currentColor);
@@ -117,7 +121,6 @@ void drawColorPicker()
   picker.colorMode(HSB, TWO_PI, 1, max_lumosity);
   
   for (int x = 0; x < picker_size; x++) {
-    float offset = PI*-1;
     float hue = ruleOfThree(x, picker_size, TWO_PI);
     hue = hue + offset;
     hue = wrap_hue(hue);
@@ -137,21 +140,21 @@ float wrap_hue(float hue)
     while (hue < 0)
     {
       hue += TWO_PI;
-      return hue;
     }
+    
+    return hue;
   }
   else if (hue > TWO_PI)
   {
     while (hue > TWO_PI)
     {
       hue -= TWO_PI;
-      return hue;
     }
-  }
-  else
-  {
+    
     return hue;
   }
+  
+  return hue;
 }
 
 void drawColorPicker_() { 
@@ -175,5 +178,18 @@ void drawColorPicker_() {
   }
 
   picker.endDraw();
+}
+
+// event
+void keyPressed() {
+  if (key == CODED) {
+    if (keyCode == LEFT) {
+      offset -= 0.1;
+    } else if (keyCode == RIGHT) {
+      offset += 0.1;
+    }
+   
+   drawColorPicker(); 
+  }
 }
 
