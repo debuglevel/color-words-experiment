@@ -1,10 +1,23 @@
-int circle_outer_radius = 150;
-int circle_inner_radius = 100;
-int picker_size = circle_outer_radius * 2;
+int window_height = 500;
+int window_width = 500;
 
-int brightness_scale_x = 100;
-int brightness_scale_y = 400;
-int brightness_scale_height = 40;
+
+//int picker_size = circle_outer_radius * 2;
+
+int colorPicker_x = 0;
+int colorPicker_y = 0;
+int colorPicker_width = window_width;
+int colorPicker_height = 100;
+
+int colorPicker_circle_outerRadius = 150;
+int colorPicker_circle_innerRadius = 100;
+
+int brightnessPicker_x = 0;
+int brightnessPicker_y = 200;
+int brightnessPicker_height = 100;
+int brightnessPicker_width = window_width;
+
+
 
 float lumosity = 300;
 float max_lumosity = 300;
@@ -19,7 +32,7 @@ PGraphics picker;
 
 void setup() {
   colorMode(HSB, TWO_PI, max_saturation, max_lumosity);
-  size(500, 500);
+  size(window_width, window_height);
   background(0);
 
   font = createFont("arial", 10, false);
@@ -32,14 +45,14 @@ void setup() {
   picked_color[0] = 250;
   picked_color[1] = 200;
 
-  picker = createGraphics(picker_size, picker_size);
+  picker = createGraphics(colorPicker_width, colorPicker_height);
   drawColorPicker();
 }
 
 void draw() {
   noFill();
   background(0);
-  image(picker, 100, 50);
+  image(picker, colorPicker_x, colorPicker_y);
 
   mouseInteraction();
 
@@ -57,7 +70,7 @@ void draw() {
   text("S: " + ruleOfThree(saturation(currentColor),   150, 255), 400, 90);
   text("B: " + ruleOfThree(brightness(currentColor),   300, 255), 400, 100);
   
-  text("DBG: " + offset,                                  400, 130);
+  text("DBG: " + lumosity,                                  400, 130);
 
   drawColorIndicator();
   drawColorDisplay(currentColor);
@@ -73,16 +86,29 @@ float ruleOfThree(float value, float oldMax, float newMax) {
 void mouseInteraction()
 {
   if (mousePressed) {
-    if (mouseY > 390) {
-      lumosity = constrain((mouseX - brightness_scale_x), 0, max_lumosity);
-    } else {
-      if (dist(mouseX, mouseY, 250, 200) < 150) {
+    // colorPicker
+    if (
+      mouseY > colorPicker_y &&
+      mouseY < colorPicker_y + colorPicker_height &&
+      mouseX > colorPicker_x &&
+      mouseY < colorPicker_x + colorPicker_width
+      )
+      {
         picked_color[0] = mouseX;
         picked_color[1] = mouseY;
       }
-    }
     
-    drawColorPicker();
+    // brightnessPicker
+    if (
+      mouseY > brightnessPicker_y &&
+      mouseY < brightnessPicker_y + brightnessPicker_height &&
+      mouseX > brightnessPicker_x &&
+      mouseY < brightnessPicker_x + brightnessPicker_width
+      )
+      {
+        lumosity = ruleOfThree(mouseX - brightnessPicker_x, brightnessPicker_width, max_lumosity);
+        lumosity = constrain(lumosity, 0, max_lumosity);
+      }
   }
 }
 
@@ -100,19 +126,32 @@ void drawColorDisplay(color currentColor)
 void drawLumosityPicker()
 {
   // draw brightness scale
-  for (int lumosity_line = 0; lumosity_line < max_lumosity; lumosity_line++) {
-    stroke(0, 0, lumosity_line);
-    line(brightness_scale_x + lumosity_line,
-         brightness_scale_y, 
-         brightness_scale_x + lumosity_line,
-         brightness_scale_y + brightness_scale_height);
+   // for (int lumosity_line = 0; lumosity_line < max_lumosity; lumosity_line++) {
+
+  for (int x = 0; x < brightnessPicker_width; x++) {
+    float currentLumosity = ruleOfThree(x, brightnessPicker_width, max_lumosity);
+    
+    stroke(0, 0, currentLumosity);
+    line(brightnessPicker_x + x,
+     brightnessPicker_y, 
+     brightnessPicker_x + x,
+     brightnessPicker_y + brightnessPicker_height);
   }
+     
+//  for (int lumosity_line = 0; lumosity_line < max_lumosity; lumosity_line++) {
+//    stroke(0, 0, lumosity_line);
+//    line(brightnessPicker_x + lumosity_line,
+//         brightnessPicker_y, 
+//         brightnessPicker_x + lumosity_line,
+//         brightnessPicker_y + brightnessPicker_height);
+//  }
   
   // indicator for current lumosity
-  line(brightness_scale_x + lumosity,
-       brightness_scale_y - 2,
-       brightness_scale_x + lumosity,
-       brightness_scale_y + brightness_scale_height + 2);
+  float currentLumosity = ruleOfThree(lumosity, max_lumosity, brightnessPicker_width);
+  line(brightnessPicker_x + currentLumosity,
+       brightnessPicker_y - 2,
+       brightnessPicker_x + currentLumosity,
+       brightnessPicker_y + brightnessPicker_height + 2);
 }
 
 void drawColorPicker()
@@ -120,14 +159,14 @@ void drawColorPicker()
   picker.beginDraw();
   picker.colorMode(HSB, TWO_PI, 1, max_lumosity);
   
-  for (int x = 0; x < picker_size; x++) {
-    float hue = ruleOfThree(x, picker_size, TWO_PI);
+  for (int x = 0; x < colorPicker_width; x++) {
+    float hue = ruleOfThree(x, colorPicker_width, TWO_PI);
     hue = hue + offset;
     hue = wrap_hue(hue);
     float saturation = 1;
     
     picker.stroke(hue, saturation, max_lumosity);
-    picker.line(x, 0, x, picker_size); // way faster than point
+    picker.line(x, 0, x, colorPicker_height); // way faster than point
   }
   
   picker.endDraw();
@@ -161,13 +200,13 @@ void drawColorPicker_() {
   picker.beginDraw();
   picker.colorMode(HSB, TWO_PI, 1, max_lumosity);
 
-  for (int x = 0; x < picker_size; x++) {
-    for (int y = 0; y < picker_size; y++) {
+  for (int x = 0; x < colorPicker_width; x++) {
+    for (int y = 0; y < colorPicker_height; y++) {
       // calulcate saturation by distance from the middle
-      float distance = dist(x, y, circle_outer_radius, circle_outer_radius);
+      float distance = dist(x, y, colorPicker_circle_outerRadius, colorPicker_circle_outerRadius);
 	  
       // if the distance between inner and outer circle radius, paint the circle
-      if (distance < circle_outer_radius && distance > circle_inner_radius) {
+      if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
         float hue = atan2(150 - y, 150 - x) + PI;
         float saturation = 1;
 
