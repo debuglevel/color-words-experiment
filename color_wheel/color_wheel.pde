@@ -26,40 +26,37 @@ float offset = 0;
 
 PFont debugFont;
 int[] picked_color;
-PGraphics picker;
+PGraphics colorPicker_image;
 
 void setup() {
   colorMode(HSB, TWO_PI, max_saturation, max_lumosity);
   size(window_width, window_height);
-  background(0);
 
   debugFont = createFont("arial", 10, false);
-
-
-  rectMode(CENTER);
-  noFill();
 
   picked_color = new int[2];
   picked_color[0] = 250;
   picked_color[1] = 200;
 
-  picker = createGraphics(colorPicker_width, colorPicker_height);
+  colorPicker_image = createGraphics(colorPicker_width, colorPicker_height);
   drawColorPicker();
 }
 
 void draw() {
-  noFill();
   background(0);
-  image(picker, colorPicker_x, colorPicker_y);
-
+  
   mouseInteraction();
+  
+  displayColorPicker();
+  
+  
 
-  drawLumosityPicker();
+  displayLumosityPicker();
 
   color currentColor = get(picked_color[0], picked_color[1]);
   displayDebugInfo(currentColor);
-  drawColorIndicator();
-  drawColorDisplay(currentColor);
+  displayColorIndicator();
+  displayColorDisplay(currentColor);
   displayInstruction();
 }
 
@@ -124,22 +121,23 @@ void displayInstruction()
   text("Bitte wähle nun rot aus.", window_width/2, 50);
 }
 
-void drawColorIndicator()
+void displayColorIndicator()
 {
+  rectMode(CENTER);
+  noFill();
+    
   rect(picked_color[0], picked_color[1], 5, 5);
 }
 
-void drawColorDisplay(color currentColor)
+void displayColorDisplay(color currentColor)
 {
   fill(currentColor);
   rect(420, 330, 40, 40);
 }
 
-void drawLumosityPicker()
+void displayLumosityPicker()
 {
   // draw brightness scale
-  // for (int lumosity_line = 0; lumosity_line < max_lumosity; lumosity_line++) {
-
   for (int x = 0; x < brightnessPicker_width; x++) {
     float currentLumosity = ruleOfThree(x, brightnessPicker_width, max_lumosity);
 
@@ -158,25 +156,30 @@ void drawLumosityPicker()
   brightnessPicker_y + brightnessPicker_height + 2);
 }
 
-void drawColorPicker()
+void displayColorPicker()
 {
-  picker.beginDraw();
-  picker.colorMode(HSB, TWO_PI, 1, max_lumosity);
+  image(colorPicker_image, colorPicker_x, colorPicker_y);
+}
+
+void drawHorizontalColorPicker()
+{
+  colorPicker_image.beginDraw();
+  colorPicker_image.colorMode(HSB, TWO_PI, 1, max_lumosity);
 
   for (int x = 0; x < colorPicker_width; x++) {
     float hue = ruleOfThree(x, colorPicker_width, TWO_PI);
     hue = hue + offset;
-    hue = wrap_hue(hue);
+    hue = wrapHue(hue);
     float saturation = 1;
 
-    picker.stroke(hue, saturation, max_lumosity);
-    picker.line(x, 0, x, colorPicker_height); // way faster than point
+    colorPicker_image.stroke(hue, saturation, max_lumosity);
+    colorPicker_image.line(x, 0, x, colorPicker_height); // way faster than point
   }
 
-  picker.endDraw();
+  colorPicker_image.endDraw();
 }
 
-float wrap_hue(float hue)
+float wrapHue(float hue)
 {
   if (hue < 0)
   {
@@ -198,9 +201,9 @@ float wrap_hue(float hue)
   return hue;
 }
 
-void drawColorPicker_() { 
-  picker.beginDraw();
-  picker.colorMode(HSB, TWO_PI, 1, max_lumosity);
+void drawCirularColorPicker() { 
+  colorPicker_image.beginDraw();
+  colorPicker_image.colorMode(HSB, TWO_PI, 1, max_lumosity);
 
   for (int x = 0; x < colorPicker_width; x++) {
     for (int y = 0; y < colorPicker_height; y++) {
@@ -212,13 +215,19 @@ void drawColorPicker_() {
         float hue = atan2(150 - y, 150 - x) + PI;
         float saturation = 1;
 
-        picker.stroke(hue, saturation, max_lumosity);
-        picker.point(x, y);
+        colorPicker_image.stroke(hue, saturation, max_lumosity);
+        colorPicker_image.point(x, y);
       }
     }
   }
 
-  picker.endDraw();
+  colorPicker_image.endDraw();
+}
+
+void drawColorPicker()
+{
+  drawHorizontalColorPicker();
+  //drawCircularColorPicker();
 }
 
 // event
