@@ -283,13 +283,10 @@ void keyTyped() {
 void enterColor()
 {
   recordColor();
-  setNextColor();
+  experimentData.setNextColor();
 }
 
-void setNextColor()
-{
-  experimentData.ColorWord += "x";
-}
+
 
 void fileSelected(File selection) {
   if (selection == null) {
