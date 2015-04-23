@@ -23,6 +23,7 @@ int max_saturation = 150;
 PFont instructionFont = createFont("Georgia", 32);
 
 Table table;
+String tableFile;
 
 float offset = 0;
 
@@ -276,6 +277,19 @@ void keyTyped() {
     //println("Key: Tab");
     writeTable();
   }
+  else if (key == DELETE)
+  {
+    selectOutput("Select a file to write to:", "fileSelected");
+  }
+}
+
+void fileSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    tableFile = selection.getAbsolutePath();
+  }
 }
 
 void initializeTable()
@@ -349,5 +363,5 @@ void recordColor()
 
 void writeTable()
 {
-  saveTable(table, "data/new.csv");
+  saveTable(table, tableFile+".csv");
 }
