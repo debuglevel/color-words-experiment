@@ -45,23 +45,23 @@ void setup() {
 
   colorPicker_image = createGraphics(colorPicker_width, colorPicker_height);
   drawColorPicker();
-  
-  initializeTable();
+
+  experimentData.initializeTable();
 }
 
 void draw() {
   background(0);
-  
+
   mouseInteraction();
-  
+
   displayColorPicker();
   color currentColor = getPickedColor();
 
   displayColorIndicator();
   displayColorDisplay(currentColor);
-  
+
   displayLumosityPicker();
-  
+
   displayInstruction();
   displayDebugInfo(currentColor);
 }
@@ -81,7 +81,7 @@ float ruleOfThree(float value, float oldMax, float newMax) {
 void mouseInteraction()
 {
   if (mousePressed) {
-    
+
     // colorPicker
     if (
     mouseY > colorPicker_y &&
@@ -129,7 +129,7 @@ void displayInstruction()
   textFont(instructionFont);
   textAlign(CENTER);
   fill(0, 0, 255);
-  
+
   text("Bitte wähle nun "+experimentData.ColorWord+" aus.", window_width/2, 50);
 }
 
@@ -137,7 +137,7 @@ void displayColorIndicator()
 {
   rectMode(CENTER);
   noFill();
-    
+
   rect(picked_color[0], picked_color[1], 5, 5);
 }
 
@@ -245,14 +245,13 @@ void drawColorPicker()
 // event
 void keyPressed() {
   //println("Key pressed");
-  
+
   if (key == CODED) 
   {
     if (keyCode == LEFT) 
     {
       offset -= 0.1;
-    }
-    else if (keyCode == RIGHT) 
+    } else if (keyCode == RIGHT) 
     {
       offset += 0.1;
     }
@@ -263,111 +262,19 @@ void keyPressed() {
 
 void keyTyped() {
   //println("Key: typed " + int(key) + " " + keyCode);
-  
+
   if (key == RETURN || key == ENTER)
   {
     //println("Key: Return/Enter");
-    enterColor();
-  }
-  else if (key == TAB)
+    experimentData.enterColor();
+  } else if (key == TAB)
   {
     //println("Key: Tab");
-    writeTable();
-  }
-  else if (key == DELETE)
+    experimentData.writeTable();
+  } else if (key == DELETE)
   {
     selectOutput("Output file where filename equals the VP_ID", "fileSelected");
   }
 }
 
-void enterColor()
-{
-  recordColor();
-  experimentData.setNextColor();
-}
 
-
-
-void fileSelected(File selection) {
-  if (selection == null) {
-    println("Window was closed or the user hit cancel.");
-  } else {
-    println("User selected " + selection.getAbsolutePath());
-    tableFile = selection.getAbsolutePath();
-    experimentData.VP_ID = selection.getName();
-  }
-}
-
-void initializeTable()
-{
-  table = new Table();
-  
-  table.addColumn("Row_ID");
-  table.addColumn("DateTime");
-  
-  table.addColumn("VP_ID");
-  
-  table.addColumn("ColorWord");
-  
-  table.addColumn("Iteration");
-  table.addColumn("Sequence");
-  
-  table.addColumn("Red");
-  table.addColumn("Green");
-  table.addColumn("Blue");
-  
-  table.addColumn("Hue");
-  table.addColumn("Saturation");
-  table.addColumn("Brightness");
-}
-
-String prependZero(String s, int digits)
-{
-  while (s.length() < digits)
-  {
-    s = "0"+s;
-  }
-  
-  return s;
-}
-
-String getCurrentDateTime()
-{
-  String d = prependZero(String.valueOf(day()), 2);
-  String mon = prependZero(String.valueOf(month()), 2);
-  String y = prependZero(String.valueOf(year()), 4);
-  String h = prependZero(String.valueOf(hour()), 2);
-  String min = prependZero(String.valueOf(minute()), 2);
-  String s = prependZero(String.valueOf(second()), 2);
-  
-  return y+"-"+mon+"-"+y+" "+h+":"+min+":"+s;
-}
-
-void recordColor()
-{
-  color currentColor = getPickedColor();
-  
-  TableRow newRow = table.addRow();
-  newRow.setInt("Row_ID", table.getRowCount() - 1);
-  newRow.setString("DateTime", getCurrentDateTime());
-  
-  newRow.setString("VP_ID", experimentData.VP_ID);
-  
-  newRow.setString("ColorWord", experimentData.ColorWord);
-  
-  newRow.setInt("Iteration", experimentData.Iteration);
-  newRow.setInt("Sequence", experimentData.Sequence);
-  
-  newRow.setFloat("Red", red(currentColor));
-  newRow.setFloat("Green", green(currentColor));
-  newRow.setFloat("Blue", blue(currentColor));
-  
-  newRow.setFloat("Hue", hue(currentColor));
-  newRow.setFloat("Saturation", saturation(currentColor));
-  newRow.setFloat("Brightness", brightness(currentColor));
-}
-
-void writeTable()
-{
-  saveTable(table, tableFile+".csv");
-}
