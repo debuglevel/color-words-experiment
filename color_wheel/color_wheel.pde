@@ -1,8 +1,8 @@
-int window_height = 500;
-int window_width = 500;
+int window_width = 800;
+int window_height = 600;
 
 int colorPicker_x = 0;
-int colorPicker_y = 0;
+int colorPicker_y = 100;
 int colorPicker_width = window_width;
 int colorPicker_height = 100;
 
@@ -12,17 +12,19 @@ int colorPicker_circle_innerRadius = 100;
 
 int brightnessPicker_x = 0;
 int brightnessPicker_y = 200;
-int brightnessPicker_height = 100;
 int brightnessPicker_width = window_width;
+int brightnessPicker_height = 100;
 
 float lumosity = 300;
 float max_lumosity = 300;
 
 int max_saturation = 150;
 
+PFont instructionFont = createFont("Georgia", 32);
+
 float offset = 0;
 
-PFont font;
+PFont debugFont;
 int[] picked_color;
 PGraphics picker;
 
@@ -31,8 +33,8 @@ void setup() {
   size(window_width, window_height);
   background(0);
 
-  font = createFont("arial", 10, false);
-  textFont(font);
+  debugFont = createFont("arial", 10, false);
+
 
   rectMode(CENTER);
   noFill();
@@ -54,22 +56,11 @@ void draw() {
 
   drawLumosityPicker();
 
-
   color currentColor = get(picked_color[0], picked_color[1]);
-
-  fill(0, 0, 255);
-
-  text("R: " + ruleOfThree(red(currentColor), TWO_PI, 255), 400, 50);
-  text("G: " + ruleOfThree(green(currentColor), 150, 255), 400, 60);
-  text("B: " + ruleOfThree(blue(currentColor), 300, 255), 400, 70);
-
-  text("S: " + ruleOfThree(saturation(currentColor), 150, 255), 400, 90);
-  text("B: " + ruleOfThree(brightness(currentColor), 300, 255), 400, 100);
-
-  text("DBG: " + lumosity, 400, 130);
-
+  displayDebugInfo(currentColor);
   drawColorIndicator();
   drawColorDisplay(currentColor);
+  displayInstruction();
 }
 
 float ruleOfThree(float value, float oldMax, float newMax) {
@@ -106,6 +97,31 @@ void mouseInteraction()
       lumosity = constrain(lumosity, 0, max_lumosity);
     }
   }
+}
+
+void displayDebugInfo(color currentColor)
+{
+  textAlign(LEFT);
+  textFont(debugFont);
+  fill(0, 0, 255);
+
+  text("R:   " + ruleOfThree(red(currentColor), TWO_PI, 255), 10, 20);
+  text("G:   " + ruleOfThree(green(currentColor), 150, 255), 10, 30);
+  text("B:   " + ruleOfThree(blue(currentColor), 300, 255), 10, 40);
+
+  text("S:   " + ruleOfThree(saturation(currentColor), 150, 255), 10, 60);
+  text("B:   " + ruleOfThree(brightness(currentColor), 300, 255), 10, 70);
+
+  text("DBG: " + lumosity, 10, 90);
+}
+
+void displayInstruction()
+{
+  textFont(instructionFont);
+  textAlign(CENTER);
+  fill(0, 0, 255);
+  
+  text("Bitte wähle nun rot aus.", window_width/2, 50);
 }
 
 void drawColorIndicator()
