@@ -22,11 +22,18 @@ int max_saturation = 150;
 
 PFont instructionFont = createFont("Georgia", 32);
 
+Table table;
+
 float offset = 0;
 
 PFont debugFont;
 int[] picked_color;
 PGraphics colorPicker_image;
+
+String experiment_vpid = "Farin U.";
+String experiment_colorWord = "Pink";
+int experiment_sequence = 1;
+int experiment_iteration = 1;
 
 void setup() {
   colorMode(HSB, TWO_PI, max_saturation, max_lumosity);
@@ -40,6 +47,8 @@ void setup() {
 
   colorPicker_image = createGraphics(colorPicker_width, colorPicker_height);
   drawColorPicker();
+  
+  initializeTable();
 }
 
 void draw() {
@@ -48,16 +57,20 @@ void draw() {
   mouseInteraction();
   
   displayColorPicker();
-  
-  
+  color currentColor = getPickedColor();
 
-  displayLumosityPicker();
-
-  color currentColor = get(picked_color[0], picked_color[1]);
-  displayDebugInfo(currentColor);
   displayColorIndicator();
   displayColorDisplay(currentColor);
+  
+  displayLumosityPicker();
+  
   displayInstruction();
+  displayDebugInfo(currentColor);
+}
+
+color getPickedColor()
+{
+  return get(picked_color[0], picked_color[1]);
 }
 
 float ruleOfThree(float value, float oldMax, float newMax) {
@@ -70,6 +83,7 @@ float ruleOfThree(float value, float oldMax, float newMax) {
 void mouseInteraction()
 {
   if (mousePressed) {
+    
     // colorPicker
     if (
     mouseY > colorPicker_y &&
@@ -232,10 +246,16 @@ void drawColorPicker()
 
 // event
 void keyPressed() {
-  if (key == CODED) {
-    if (keyCode == LEFT) {
+  //println("Key pressed");
+  
+  if (key == CODED) 
+  {
+    if (keyCode == LEFT) 
+    {
       offset -= 0.1;
-    } else if (keyCode == RIGHT) {
+    }
+    else if (keyCode == RIGHT) 
+    {
       offset += 0.1;
     }
 
@@ -243,3 +263,91 @@ void keyPressed() {
   }
 }
 
+void keyTyped() {
+  //println("Key: typed " + int(key) + " " + keyCode);
+  
+  if (key == RETURN || key == ENTER)
+  {
+    //println("Key: Return/Enter");
+    recordColor();
+  }
+  else if (key == TAB)
+  {
+    //println("Key: Tab");
+    writeTable();
+  }
+}
+
+void initializeTable()
+{
+  table = new Table();
+  
+  table.addColumn("Row_ID");
+  table.addColumn("DateTime");
+  
+  table.addColumn("VP_ID");
+  
+  table.addColumn("ColorWord");
+  
+  table.addColumn("Iteration");
+  table.addColumn("Sequence");
+  
+  table.addColumn("Red");
+  table.addColumn("Green");
+  table.addColumn("Blue");
+  
+  table.addColumn("Hue");
+  table.addColumn("Saturation");
+  table.addColumn("Brightness");
+}
+
+String prependZero(String s, int digits)
+{
+  while (s.length() < digits)
+  {
+    s = "0"+s;
+  }
+  
+  return s;
+}
+
+String getCurrentDateTime()
+{
+  String d = prependZero(String.valueOf(day()), 2);
+  String mon = prependZero(String.valueOf(month()), 2);
+  String y = prependZero(String.valueOf(year()), 4);
+  String h = prependZero(String.valueOf(hour()), 2);
+  String min = prependZero(String.valueOf(minute()), 2);
+  String s = prependZero(String.valueOf(second()), 2);
+  
+  return y+"-"+mon+"-"+y+" "+h+":"+min+":"+s;
+}
+
+void recordColor()
+{
+  color currentColor = getPickedColor();
+  
+  TableRow newRow = table.addRow();
+  newRow.setInt("Row_ID", table.getRowCount() - 1);
+  newRow.setString("DateTime", getCurrentDateTime());
+  
+  newRow.setString("VP_ID", experiment_vpid);
+  
+  newRow.setString("ColorWord", experiment_colorWord);
+  
+  newRow.setInt("Iteration", experiment_iteration);
+  newRow.setInt("Sequence", experiment_sequence);
+  
+  newRow.setFloat("Red", red(currentColor));
+  newRow.setFloat("Green", green(currentColor));
+  newRow.setFloat("Blue", blue(currentColor));
+  
+  newRow.setFloat("Hue", hue(currentColor));
+  newRow.setFloat("Saturation", saturation(currentColor));
+  newRow.setFloat("Brightness", brightness(currentColor));
+}
+
+void writeTable()
+{
+  saveTable(table, "data/new.csv");
+}
