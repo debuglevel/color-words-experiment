@@ -31,10 +31,7 @@ PFont debugFont;
 int[] picked_color;
 PGraphics colorPicker_image;
 
-String experiment_vpid = "Farin U.";
-String experiment_colorWord = "Pink";
-int experiment_sequence = 1;
-int experiment_iteration = 1;
+ExperimentData experimentData = new ExperimentData();
 
 void setup() {
   colorMode(HSB, TWO_PI, max_saturation, max_lumosity);
@@ -133,7 +130,7 @@ void displayInstruction()
   textAlign(CENTER);
   fill(0, 0, 255);
   
-  text("Bitte wähle nun rot aus.", window_width/2, 50);
+  text("Bitte wähle nun "+experimentData.ColorWord+" aus.", window_width/2, 50);
 }
 
 void displayColorIndicator()
@@ -270,7 +267,7 @@ void keyTyped() {
   if (key == RETURN || key == ENTER)
   {
     //println("Key: Return/Enter");
-    recordColor();
+    enterColor();
   }
   else if (key == TAB)
   {
@@ -279,8 +276,19 @@ void keyTyped() {
   }
   else if (key == DELETE)
   {
-    selectOutput("Select a file to write to:", "fileSelected");
+    selectOutput("Output file where filename equals the VP_ID", "fileSelected");
   }
+}
+
+void enterColor()
+{
+  recordColor();
+  setNextColor();
+}
+
+void setNextColor()
+{
+  experimentData.ColorWord += "x";
 }
 
 void fileSelected(File selection) {
@@ -289,6 +297,7 @@ void fileSelected(File selection) {
   } else {
     println("User selected " + selection.getAbsolutePath());
     tableFile = selection.getAbsolutePath();
+    experimentData.VP_ID = selection.getName();
   }
 }
 
@@ -345,12 +354,12 @@ void recordColor()
   newRow.setInt("Row_ID", table.getRowCount() - 1);
   newRow.setString("DateTime", getCurrentDateTime());
   
-  newRow.setString("VP_ID", experiment_vpid);
+  newRow.setString("VP_ID", experimentData.VP_ID);
   
-  newRow.setString("ColorWord", experiment_colorWord);
+  newRow.setString("ColorWord", experimentData.ColorWord);
   
-  newRow.setInt("Iteration", experiment_iteration);
-  newRow.setInt("Sequence", experiment_sequence);
+  newRow.setInt("Iteration", experimentData.Iteration);
+  newRow.setInt("Sequence", experimentData.Sequence);
   
   newRow.setFloat("Red", red(currentColor));
   newRow.setFloat("Green", green(currentColor));
