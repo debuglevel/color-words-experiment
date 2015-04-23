@@ -2,12 +2,14 @@ class ExperimentData
 {
   String VP_ID = "Undefined";
   String ColorWord = "Undefined";
-  int Sequence = 999;
-  int Iteration = 999;
+  int Iteration = 1;
+  int Sequence = 1;
 
   String[] colorWords = { 
     "Rot", "Grün", "Blau", "Gelb", "Schwarz", "Weiß"
   };
+  
+  StringList usedColors = new StringList();
 
   ExperimentData()
   {
@@ -21,13 +23,61 @@ class ExperimentData
 
   void setNextColor()
   {
-    experimentData.ColorWord = this.getRandomColorWord();
+    boolean isColorAlreadyUsed = true;
+    String randomColor = "undefined";
+    
+    while (isColorAlreadyUsed)
+    {
+      randomColor = this.getRandomColorWord();
+      isColorAlreadyUsed = usedColors.hasValue(randomColor);
+      //println("Took random color "+randomColor+", already used: "+isColorAlreadyUsed);
+    }
+    
+    usedColors.append(randomColor);
+    experimentData.ColorWord = randomColor;
+  }
+  
+  void printDebug()
+  {
+    return; //
+    
+    println("Iteration "+this.Iteration+"  Sequence "+this.Sequence + "  Color "+this.ColorWord);
+    
+    print("Used Colors: ");
+    for (String usedColor : usedColors)
+    {
+      print(usedColor+" ");
+    }
+    println();
+  }
+  
+  void nextIteration()
+  {
+    //println("New Iteration started.");
+    usedColors = new StringList();
+    this.Sequence = 1;
+    this.Iteration++;
+    this.setNextColor();
+  }
+  
+  void nextStep()
+  {
+    if (this.Sequence < this.colorWords.length)
+    {
+      this.Sequence++;
+      this.setNextColor();
+    }
+    else
+    {
+      this.nextIteration();
+    }
   }
 
   void enterColor()
   {
-    recordColor();
-    experimentData.setNextColor();
+    this.recordColor();
+    this.nextStep();
+    printDebug();
   }
 
   void fileSelected(File selection) {

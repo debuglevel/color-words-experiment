@@ -47,6 +47,7 @@ void setup() {
   drawColorPicker();
 
   experimentData.initializeTable();
+  experimentData.setNextColor();
 }
 
 void draw() {
