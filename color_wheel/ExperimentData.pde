@@ -75,9 +75,9 @@ class ExperimentData
     }
   }
 
-  void enterColor()
+  void enterColor(color currentColor)
   {
-    this.recordColor();
+    this.recordColor(currentColor);
     this.nextStep();
     printDebug();
   }
@@ -137,10 +137,8 @@ class ExperimentData
     return y+"-"+mon+"-"+y+" "+h+":"+min+":"+s;
   }
 
-  void recordColor()
+  void recordColor(color currentColor)
   {
-    color currentColor = getPickedColor();
-
     TableRow newRow = table.addRow();
     newRow.setInt("Row_ID", table.getRowCount() - 1);
     newRow.setString("DateTime", getCurrentDateTime());

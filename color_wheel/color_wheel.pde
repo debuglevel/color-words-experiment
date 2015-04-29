@@ -23,7 +23,6 @@ String tableFile;
 float offset = 0;
 
 PFont debugFont;
-int[] picked_color;
 
 
 ExperimentData experimentData = new ExperimentData();
@@ -37,10 +36,6 @@ void setup() {
   joystick.sliders.setRange(colorPicker.x, colorPicker.y, colorPicker.x + colorPicker.width, colorPicker.y + colorPicker.height);
 
   debugFont = createFont("arial", 10, false);
-
-  picked_color = new int[2];
-  picked_color[0] = 250;
-  picked_color[1] = 200;
 
   colorPicker.setup();
   colorPicker.draw();
@@ -56,7 +51,7 @@ void draw() {
   joystickInteraction();
 
   displayColorPicker();
-  color currentColor = getPickedColor();
+  color currentColor = colorPicker.getColor();
 
   displayColorIndicator();
   displayColorDisplay(currentColor);
@@ -65,11 +60,6 @@ void draw() {
 
   displayInstruction();
   displayDebugInfo(currentColor);
-}
-
-color getPickedColor()
-{
-  return get(picked_color[0], picked_color[1]);
 }
 
 float ruleOfThree(float value, float oldMax, float newMax) {
@@ -89,15 +79,9 @@ void joystickInteraction()
   // colorPicker
   if (colorPicker instanceof HorizontalColorPicker)
   {
-    if (
-    mouseY > colorPicker.y &&
-      mouseY < colorPicker.y + colorPicker.height &&
-      mouseX > colorPicker.x &&
-      mouseX < colorPicker.x + colorPicker.width
-      )
+    if (colorPicker.isInRange(mouseX, mouseY))
     {
-      picked_color[0] = mouseX;
-      picked_color[1] = mouseY;
+      colorPicker.setPickPositionAbsolute(mouseX, mouseY);
     }
   } else if (colorPicker instanceof CircularColorPicker)
   {
@@ -111,8 +95,7 @@ void joystickInteraction()
     float distance = dist(relativePositionX, relativePositionY, circularColorPicker.outerRadius, circularColorPicker.outerRadius);
 
     if (distance < circularColorPicker.outerRadius && distance > circularColorPicker.innerRadius) {
-      picked_color[0] = joystick.sliders.X();
-      picked_color[1] = joystick.sliders.Y();
+      colorPicker.setPickPositionAbsolute(joystick.sliders.X(), joystick.sliders.Y());
     }
   }
 }
@@ -124,18 +107,11 @@ void mouseInteraction()
     // colorPicker
     if (colorPicker instanceof HorizontalColorPicker)
     {
-      if (
-      mouseY > colorPicker.y &&
-        mouseY < colorPicker.y + colorPicker.height &&
-        mouseX > colorPicker.x &&
-        mouseX < colorPicker.x + colorPicker.width
-        )
+      if (colorPicker.isInRange(mouseX, mouseY))
       {
-        picked_color[0] = mouseX;
-        picked_color[1] = mouseY;
+        colorPicker.setPickPositionAbsolute(mouseX, mouseY);
       }
-    } else  if (colorPicker instanceof CircularColorPicker)
-
+    } else if (colorPicker instanceof CircularColorPicker)
     {
       CircularColorPicker circularColorPicker = (CircularColorPicker)colorPicker;
 
@@ -147,8 +123,7 @@ void mouseInteraction()
       float distance = dist(relativePositionX, relativePositionY, circularColorPicker.outerRadius, circularColorPicker.outerRadius);
 
       if (distance < circularColorPicker.outerRadius && distance > circularColorPicker.innerRadius) {
-        picked_color[0] = mouseX;
-        picked_color[1] = mouseY;
+        colorPicker.setPickPositionAbsolute(mouseX, mouseY);
       }
     }
 
@@ -196,7 +171,7 @@ void displayColorIndicator()
   rectMode(CENTER);
   noFill();
 
-  rect(picked_color[0], picked_color[1], 5, 5);
+  rect(colorPicker.x + colorPicker.pickedColorPosition[0], colorPicker.y + colorPicker.pickedColorPosition[1], 5, 5);
 }
 
 void displayColorDisplay(color currentColor)
@@ -277,7 +252,7 @@ void keyTyped() {
   if (key == RETURN || key == ENTER)
   {
     //println("Key: Return/Enter");
-    experimentData.enterColor();
+    experimentData.enterColor(colorPicker.getColor());
   } else if (key == TAB)
   {
     //println("Key: Tab");
