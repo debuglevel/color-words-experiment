@@ -8,7 +8,7 @@ class ExperimentData
   String[] colorWords = { 
     "Rot", "Grün", "Blau", "Gelb", "Schwarz", "Weiß"
   };
-  
+
   StringList usedColors = new StringList();
 
   ExperimentData()
@@ -25,27 +25,27 @@ class ExperimentData
   {
     boolean isColorAlreadyUsed = true;
     String randomColor = "undefined";
-    
+
     while (isColorAlreadyUsed)
     {
       randomColor = this.getRandomColorWord();
       isColorAlreadyUsed = usedColors.hasValue(randomColor);
       //println("Took random color "+randomColor+", already used: "+isColorAlreadyUsed);
     }
-    
+
     usedColors.append(randomColor);
     experimentData.ColorWord = randomColor;
   }
-  
+
   void printDebug()
   {
     if (true == true)
     {
       return;
     }
-    
+
     println("Iteration "+this.Iteration+"  Sequence "+this.Sequence + "  Color "+this.ColorWord);
-    
+
     print("Used Colors: ");
     for (String usedColor : usedColors)
     {
@@ -53,7 +53,7 @@ class ExperimentData
     }
     println();
   }
-  
+
   void nextIteration()
   {
     //println("New Iteration started.");
@@ -62,15 +62,14 @@ class ExperimentData
     this.Iteration++;
     this.setNextColor();
   }
-  
+
   void nextStep()
   {
     if (this.Sequence < this.colorWords.length)
     {
       this.Sequence++;
       this.setNextColor();
-    }
-    else
+    } else
     {
       this.nextIteration();
     }

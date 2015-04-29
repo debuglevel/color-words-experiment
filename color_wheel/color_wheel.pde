@@ -96,34 +96,34 @@ void joystickInteraction()
   {
     return;
   }
-  
+
   // colorPicker
-    if (colorPicker_mode.equals("horizontal"))
+  if (colorPicker_mode.equals("horizontal"))
+  {
+    if (
+    mouseY > colorPicker_y &&
+      mouseY < colorPicker_y + colorPicker_height &&
+      mouseX > colorPicker_x &&
+      mouseX < colorPicker_x + colorPicker_width
+      )
     {
-      if (
-      mouseY > colorPicker_y &&
-        mouseY < colorPicker_y + colorPicker_height &&
-        mouseX > colorPicker_x &&
-        mouseX < colorPicker_x + colorPicker_width
-        )
-      {
-        picked_color[0] = mouseX;
-        picked_color[1] = mouseY;
-      }
-    } else if (colorPicker_mode.equals("circle"))
-    {
-      float relativePositionX = colorPicker_x - joystick.getSliderPositionX();
-      float relativePositionY = colorPicker_y - joystick.getSliderPositionY();
-      
-      println("X = " + relativePositionX + " | Y = " + relativePositionY);
-
-      float distance = dist(relativePositionX, relativePositionY, colorPicker_circle_outerRadius, colorPicker_circle_outerRadius);
-
-      if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
-        picked_color[0] = joystick.getSliderPositionX();
-        picked_color[1] = joystick.getSliderPositionY();
-      }
+      picked_color[0] = mouseX;
+      picked_color[1] = mouseY;
     }
+  } else if (colorPicker_mode.equals("circle"))
+  {
+    float relativePositionX = colorPicker_x - joystick.getSliderPositionX();
+    float relativePositionY = colorPicker_y - joystick.getSliderPositionY();
+
+    println("X = " + relativePositionX + " | Y = " + relativePositionY);
+
+    float distance = dist(relativePositionX, relativePositionY, colorPicker_circle_outerRadius, colorPicker_circle_outerRadius);
+
+    if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
+      picked_color[0] = joystick.getSliderPositionX();
+      picked_color[1] = joystick.getSliderPositionY();
+    }
+  }
 }
 
 void mouseInteraction()
@@ -344,5 +344,4 @@ void keyTyped() {
     selectOutput("Output file where filename equals the VP_ID", "fileSelected");
   }
 }
-
 
