@@ -3,15 +3,18 @@ int window_height = 600;
 
 int colorPicker_x = 0;
 int colorPicker_y = 100;
-int colorPicker_width = window_width;
+int colorPicker_width = 100;
 int colorPicker_height = 100;
 
+// color picker mode (may be "circle" or "horizontal"
+String colorPicker_mode = "circle";
+
 // only if colorPicker is a circle
-int colorPicker_circle_outerRadius = 150;
-int colorPicker_circle_innerRadius = 100;
+int colorPicker_circle_outerRadius = colorPicker_width / 2;
+int colorPicker_circle_innerRadius = colorPicker_circle_outerRadius / 2;
 
 int brightnessPicker_x = 0;
-int brightnessPicker_y = 200;
+int brightnessPicker_y = 400;
 int brightnessPicker_width = window_width;
 int brightnessPicker_height = 100;
 
@@ -84,15 +87,30 @@ void mouseInteraction()
   if (mousePressed) {
 
     // colorPicker
-    if (
-    mouseY > colorPicker_y &&
-      mouseY < colorPicker_y + colorPicker_height &&
-      mouseX > colorPicker_x &&
-      mouseY < colorPicker_x + colorPicker_width
-      )
+    if (colorPicker_mode.equals("horizontal"))
     {
-      picked_color[0] = mouseX;
-      picked_color[1] = mouseY;
+      if (
+      mouseY > colorPicker_y &&
+        mouseY < colorPicker_y + colorPicker_height &&
+        mouseX > colorPicker_x &&
+        mouseX < colorPicker_x + colorPicker_width
+        )
+      {
+        picked_color[0] = mouseX;
+        picked_color[1] = mouseY;
+      }
+    } else if (colorPicker_mode.equals("circle"))
+    {
+      float relativePositionX = mouseX - colorPicker_x;
+      float relativePositionY = mouseY - colorPicker_y;
+
+      // calulcate saturation by distance from the middle
+      float distance = dist(relativePositionX, relativePositionY, colorPicker_circle_outerRadius, colorPicker_circle_outerRadius);
+
+      if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
+        picked_color[0] = mouseX;
+        picked_color[1] = mouseY;
+      }
     }
 
     // brightnessPicker
@@ -214,7 +232,7 @@ float wrapHue(float hue)
   return hue;
 }
 
-void drawCirularColorPicker() { 
+void drawCircularColorPicker() { 
   colorPicker_image.beginDraw();
   colorPicker_image.colorMode(HSB, TWO_PI, 1, max_lumosity);
 
@@ -225,7 +243,7 @@ void drawCirularColorPicker() {
 
       // if the distance between inner and outer circle radius, paint the circle
       if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
-        float hue = atan2(150 - y, 150 - x) + PI;
+        float hue = atan2(colorPicker_circle_outerRadius - y, colorPicker_circle_outerRadius - x) + PI;
         float saturation = 1;
 
         colorPicker_image.stroke(hue, saturation, max_lumosity);
@@ -239,8 +257,13 @@ void drawCirularColorPicker() {
 
 void drawColorPicker()
 {
-  drawHorizontalColorPicker();
-  //drawCircularColorPicker();
+  if (colorPicker_mode.equals("horizontal"))
+  {
+    drawHorizontalColorPicker();
+  } else if (colorPicker_mode.equals("circle"))
+  {
+    drawCircularColorPicker();
+  }
 }
 
 // event
@@ -277,5 +300,4 @@ void keyTyped() {
     selectOutput("Output file where filename equals the VP_ID", "fileSelected");
   }
 }
-
 

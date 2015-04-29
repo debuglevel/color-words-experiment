@@ -39,7 +39,10 @@ class ExperimentData
   
   void printDebug()
   {
-    return; //
+    if (true == true)
+    {
+      return;
+    }
     
     println("Iteration "+this.Iteration+"  Sequence "+this.Sequence + "  Color "+this.ColorWord);
     
