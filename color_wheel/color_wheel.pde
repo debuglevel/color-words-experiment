@@ -1,3 +1,7 @@
+import org.gamecontrolplus.gui.*;
+import org.gamecontrolplus.*;
+import net.java.games.input.*;
+
 int window_width = 800;
 int window_height = 600;
 
@@ -6,7 +10,7 @@ int colorPicker_y = 100;
 int colorPicker_width = 100;
 int colorPicker_height = 100;
 
-// color picker mode (may be "circle" or "horizontal"
+// color picker mode (may be "circle" or "horizontal")
 String colorPicker_mode = "circle";
 
 // only if colorPicker is a circle
@@ -35,10 +39,13 @@ int[] picked_color;
 PGraphics colorPicker_image;
 
 ExperimentData experimentData = new ExperimentData();
+Joystick joystick = new Joystick(this);
 
 void setup() {
   colorMode(HSB, TWO_PI, max_saturation, max_lumosity);
   size(window_width, window_height);
+
+  joystick.setSliderRange(colorPicker_x, colorPicker_y, colorPicker_x + colorPicker_width, colorPicker_y + colorPicker_height);
 
   debugFont = createFont("arial", 10, false);
 
@@ -57,6 +64,7 @@ void draw() {
   background(0);
 
   mouseInteraction();
+  joystickInteraction();
 
   displayColorPicker();
   color currentColor = getPickedColor();
@@ -80,6 +88,42 @@ float ruleOfThree(float value, float oldMax, float newMax) {
   //      newMax 255 -> newValue 128
   float newValue = ((value / oldMax) * newMax);
   return newValue;
+}
+
+void joystickInteraction()
+{
+  if (joystick.isActive == false)
+  {
+    return;
+  }
+  
+  // colorPicker
+    if (colorPicker_mode.equals("horizontal"))
+    {
+      if (
+      mouseY > colorPicker_y &&
+        mouseY < colorPicker_y + colorPicker_height &&
+        mouseX > colorPicker_x &&
+        mouseX < colorPicker_x + colorPicker_width
+        )
+      {
+        picked_color[0] = mouseX;
+        picked_color[1] = mouseY;
+      }
+    } else if (colorPicker_mode.equals("circle"))
+    {
+      float relativePositionX = colorPicker_x - joystick.getSliderPositionX();
+      float relativePositionY = colorPicker_y - joystick.getSliderPositionY();
+      
+      println("X = " + relativePositionX + " | Y = " + relativePositionY);
+
+      float distance = dist(relativePositionX, relativePositionY, colorPicker_circle_outerRadius, colorPicker_circle_outerRadius);
+
+      if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
+        picked_color[0] = joystick.getSliderPositionX();
+        picked_color[1] = joystick.getSliderPositionY();
+      }
+    }
 }
 
 void mouseInteraction()
@@ -300,4 +344,5 @@ void keyTyped() {
     selectOutput("Output file where filename equals the VP_ID", "fileSelected");
   }
 }
+
 
