@@ -5,7 +5,7 @@ class CircularColorPicker extends ColorPicker
   
   public void draw() { 
     image.beginDraw();
-    image.colorMode(HSB, TWO_PI, 1, max_lumosity);
+    image.colorMode(HSB, TWO_PI, 1, brightnessPicker.max_lumosity);
 
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
@@ -17,7 +17,7 @@ class CircularColorPicker extends ColorPicker
           float hue = atan2(outerRadius - y, outerRadius - x) + PI;
           float saturation = 1;
 
-          image.stroke(hue, saturation, max_lumosity);
+          image.stroke(hue, saturation, brightnessPicker.max_lumosity);
           image.point(x, y);
         }
       }
