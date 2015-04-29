@@ -38,14 +38,15 @@ PFont debugFont;
 int[] picked_color;
 PGraphics colorPicker_image;
 
-ExperimentData experimentData = new ExperimentData();
-Joystick joystick = new Joystick(this);
+ExperimentData experimentData;
+Joystick joystick;
 
 void setup() {
   colorMode(HSB, TWO_PI, max_saturation, max_lumosity);
   size(window_width, window_height);
 
-  joystick.setSliderRange(colorPicker_x, colorPicker_y, colorPicker_x + colorPicker_width, colorPicker_y + colorPicker_height);
+  joystick = new Joystick(this);
+  joystick.sliders.setRange(colorPicker_x, colorPicker_y, colorPicker_x + colorPicker_width, colorPicker_y + colorPicker_height);
 
   debugFont = createFont("arial", 10, false);
 
@@ -56,6 +57,7 @@ void setup() {
   colorPicker_image = createGraphics(colorPicker_width, colorPicker_height);
   drawColorPicker();
 
+  experimentData = new ExperimentData();
   experimentData.initializeTable();
   experimentData.setNextColor();
 }
@@ -112,16 +114,16 @@ void joystickInteraction()
     }
   } else if (colorPicker_mode.equals("circle"))
   {
-    float relativePositionX = colorPicker_x - joystick.getSliderPositionX();
-    float relativePositionY = colorPicker_y - joystick.getSliderPositionY();
+    float relativePositionX = colorPicker_x - joystick.sliders.X();
+    float relativePositionY = colorPicker_y - joystick.sliders.Y();
 
     println("X = " + relativePositionX + " | Y = " + relativePositionY);
 
     float distance = dist(relativePositionX, relativePositionY, colorPicker_circle_outerRadius, colorPicker_circle_outerRadius);
 
     if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
-      picked_color[0] = joystick.getSliderPositionX();
-      picked_color[1] = joystick.getSliderPositionY();
+      picked_color[0] = joystick.sliders.X();
+      picked_color[1] = joystick.sliders.Y();
     }
   }
 }
