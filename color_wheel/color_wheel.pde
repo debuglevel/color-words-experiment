@@ -5,18 +5,6 @@ import net.java.games.input.*;
 int window_width = 800;
 int window_height = 600;
 
-int colorPicker_x = 0;
-int colorPicker_y = 100;
-int colorPicker_width = 100;
-int colorPicker_height = 100;
-
-// color picker mode (may be "circle" or "horizontal")
-String colorPicker_mode = "circle";
-
-// only if colorPicker is a circle
-int colorPicker_circle_outerRadius = colorPicker_width / 2;
-int colorPicker_circle_innerRadius = colorPicker_circle_outerRadius / 2;
-
 int brightnessPicker_x = 0;
 int brightnessPicker_y = 400;
 int brightnessPicker_width = window_width;
@@ -36,17 +24,17 @@ float offset = 0;
 
 PFont debugFont;
 int[] picked_color;
-PGraphics colorPicker_image;
 
-ExperimentData experimentData;
-Joystick joystick;
+
+ExperimentData experimentData = new ExperimentData();
+Joystick joystick = new Joystick(this);
+ColorPicker colorPicker = new CircularColorPicker();
 
 void setup() {
   colorMode(HSB, TWO_PI, max_saturation, max_lumosity);
   size(window_width, window_height);
 
-  joystick = new Joystick(this);
-  joystick.sliders.setRange(colorPicker_x, colorPicker_y, colorPicker_x + colorPicker_width, colorPicker_y + colorPicker_height);
+  joystick.sliders.setRange(colorPicker.x, colorPicker.y, colorPicker.x + colorPicker.width, colorPicker.y + colorPicker.height);
 
   debugFont = createFont("arial", 10, false);
 
@@ -54,10 +42,9 @@ void setup() {
   picked_color[0] = 250;
   picked_color[1] = 200;
 
-  colorPicker_image = createGraphics(colorPicker_width, colorPicker_height);
-  drawColorPicker();
+  colorPicker.setup();
+  colorPicker.draw();
 
-  experimentData = new ExperimentData();
   experimentData.initializeTable();
   experimentData.setNextColor();
 }
@@ -100,28 +87,30 @@ void joystickInteraction()
   }
 
   // colorPicker
-  if (colorPicker_mode.equals("horizontal"))
+  if (colorPicker instanceof HorizontalColorPicker)
   {
     if (
-    mouseY > colorPicker_y &&
-      mouseY < colorPicker_y + colorPicker_height &&
-      mouseX > colorPicker_x &&
-      mouseX < colorPicker_x + colorPicker_width
+    mouseY > colorPicker.y &&
+      mouseY < colorPicker.y + colorPicker.height &&
+      mouseX > colorPicker.x &&
+      mouseX < colorPicker.x + colorPicker.width
       )
     {
       picked_color[0] = mouseX;
       picked_color[1] = mouseY;
     }
-  } else if (colorPicker_mode.equals("circle"))
+  } else if (colorPicker instanceof CircularColorPicker)
   {
-    float relativePositionX = colorPicker_x - joystick.sliders.X();
-    float relativePositionY = colorPicker_y - joystick.sliders.Y();
+    CircularColorPicker circularColorPicker = (CircularColorPicker)colorPicker;
+
+    float relativePositionX = colorPicker.x - joystick.sliders.X();
+    float relativePositionY = colorPicker.y - joystick.sliders.Y();
 
     println("X = " + relativePositionX + " | Y = " + relativePositionY);
 
-    float distance = dist(relativePositionX, relativePositionY, colorPicker_circle_outerRadius, colorPicker_circle_outerRadius);
+    float distance = dist(relativePositionX, relativePositionY, circularColorPicker.outerRadius, circularColorPicker.outerRadius);
 
-    if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
+    if (distance < circularColorPicker.outerRadius && distance > circularColorPicker.innerRadius) {
       picked_color[0] = joystick.sliders.X();
       picked_color[1] = joystick.sliders.Y();
     }
@@ -133,27 +122,31 @@ void mouseInteraction()
   if (mousePressed) {
 
     // colorPicker
-    if (colorPicker_mode.equals("horizontal"))
+    if (colorPicker instanceof HorizontalColorPicker)
     {
       if (
-      mouseY > colorPicker_y &&
-        mouseY < colorPicker_y + colorPicker_height &&
-        mouseX > colorPicker_x &&
-        mouseX < colorPicker_x + colorPicker_width
+      mouseY > colorPicker.y &&
+        mouseY < colorPicker.y + colorPicker.height &&
+        mouseX > colorPicker.x &&
+        mouseX < colorPicker.x + colorPicker.width
         )
       {
         picked_color[0] = mouseX;
         picked_color[1] = mouseY;
       }
-    } else if (colorPicker_mode.equals("circle"))
+    } else  if (colorPicker instanceof CircularColorPicker)
+
     {
-      float relativePositionX = mouseX - colorPicker_x;
-      float relativePositionY = mouseY - colorPicker_y;
+      CircularColorPicker circularColorPicker = (CircularColorPicker)colorPicker;
+
+
+      float relativePositionX = mouseX - colorPicker.x;
+      float relativePositionY = mouseY - colorPicker.y;
 
       // calulcate saturation by distance from the middle
-      float distance = dist(relativePositionX, relativePositionY, colorPicker_circle_outerRadius, colorPicker_circle_outerRadius);
+      float distance = dist(relativePositionX, relativePositionY, circularColorPicker.outerRadius, circularColorPicker.outerRadius);
 
-      if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
+      if (distance < circularColorPicker.outerRadius && distance > circularColorPicker.innerRadius) {
         picked_color[0] = mouseX;
         picked_color[1] = mouseY;
       }
@@ -195,7 +188,7 @@ void displayInstruction()
   textAlign(CENTER);
   fill(0, 0, 255);
 
-  text("Bitte wähle nun "+experimentData.ColorWord+" aus.", window_width/2, 50);
+  text("Bitte wähle nun " + experimentData.ColorWord + " aus.", window_width/2, 50);
 }
 
 void displayColorIndicator()
@@ -235,25 +228,7 @@ void displayLumosityPicker()
 
 void displayColorPicker()
 {
-  image(colorPicker_image, colorPicker_x, colorPicker_y);
-}
-
-void drawHorizontalColorPicker()
-{
-  colorPicker_image.beginDraw();
-  colorPicker_image.colorMode(HSB, TWO_PI, 1, max_lumosity);
-
-  for (int x = 0; x < colorPicker_width; x++) {
-    float hue = ruleOfThree(x, colorPicker_width, TWO_PI);
-    hue = hue + offset;
-    hue = wrapHue(hue);
-    float saturation = 1;
-
-    colorPicker_image.stroke(hue, saturation, max_lumosity);
-    colorPicker_image.line(x, 0, x, colorPicker_height); // way faster than point
-  }
-
-  colorPicker_image.endDraw();
+  image(colorPicker.image, colorPicker.x, colorPicker.y);
 }
 
 float wrapHue(float hue)
@@ -278,40 +253,6 @@ float wrapHue(float hue)
   return hue;
 }
 
-void drawCircularColorPicker() { 
-  colorPicker_image.beginDraw();
-  colorPicker_image.colorMode(HSB, TWO_PI, 1, max_lumosity);
-
-  for (int x = 0; x < colorPicker_width; x++) {
-    for (int y = 0; y < colorPicker_height; y++) {
-      // calulcate saturation by distance from the middle
-      float distance = dist(x, y, colorPicker_circle_outerRadius, colorPicker_circle_outerRadius);
-
-      // if the distance between inner and outer circle radius, paint the circle
-      if (distance < colorPicker_circle_outerRadius && distance > colorPicker_circle_innerRadius) {
-        float hue = atan2(colorPicker_circle_outerRadius - y, colorPicker_circle_outerRadius - x) + PI;
-        float saturation = 1;
-
-        colorPicker_image.stroke(hue, saturation, max_lumosity);
-        colorPicker_image.point(x, y);
-      }
-    }
-  }
-
-  colorPicker_image.endDraw();
-}
-
-void drawColorPicker()
-{
-  if (colorPicker_mode.equals("horizontal"))
-  {
-    drawHorizontalColorPicker();
-  } else if (colorPicker_mode.equals("circle"))
-  {
-    drawCircularColorPicker();
-  }
-}
-
 // event
 void keyPressed() {
   //println("Key pressed");
@@ -326,7 +267,7 @@ void keyPressed() {
       offset += 0.1;
     }
 
-    drawColorPicker();
+    colorPicker.draw();
   }
 }
 
