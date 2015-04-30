@@ -11,14 +11,13 @@ abstract class ColorPicker
 
   public ColorPicker()
   {
+    pickedColorPosition = new int[2];
+    pickedColorPosition[0] = 0;
+    pickedColorPosition[1] = 0;
   }
 
   public void setup()
   {
-    pickedColorPosition = new int[2];
-    pickedColorPosition[0] = 0;
-    pickedColorPosition[1] = 0;
-
     image = createGraphics(width, height);
   }
 

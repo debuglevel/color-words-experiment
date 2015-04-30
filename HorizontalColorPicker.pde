@@ -1,7 +1,14 @@
 class HorizontalColorPicker extends ColorPicker
 {
   float colorRange = PI/2; 
-  
+
+  public HorizontalColorPicker()
+  {
+    pickedColorPosition = new int[2];
+    pickedColorPosition[0] = (this.width / 2);
+    pickedColorPosition[1] = (this.height / 2);
+  }
+
   public void draw()
   {
     image.beginDraw();
