@@ -5,11 +5,22 @@ public class Interaction
   void setup()
   {
     joystick.button.plug(this, "joystickButtonPressed", ControlIO.ON_RELEASE);
+    joystick.hat.hat.plug(this, "joystickHatPressed", ControlIO.WHILE_PRESS);
   }
 
   public void joystickButtonPressed()
   {
     experimentData.enterColor(colorPicker.getColor());
+  }
+
+  public void joystickHatPressed(float x, float y)
+  {
+    println(x+" "+y);
+    
+    saturationBrightnessPicker.pickedPosition[0] += x; //joystick.hat.X(); 
+    saturationBrightnessPicker.pickedPosition[1] += y; //joystick.hat.Y();
+    
+    displaySLIndicator();
   }
 
   // event

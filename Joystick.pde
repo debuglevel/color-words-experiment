@@ -8,6 +8,7 @@ class Joystick
   private ControlButton button;
 
   public JoystickSliders sliders = new JoystickSliders();
+  public JoystickHat hat = new JoystickHat();
 
   public Joystick(PApplet applet)
   {   
@@ -26,6 +27,9 @@ class Joystick
 
     sliders.device = device;
     sliders.setSliders("X-Achse", "Y-Achse");
+    
+    hat.device = device;
+    hat.setHat("cooliehat: Mehrwegeschalter");
   }
 }
 

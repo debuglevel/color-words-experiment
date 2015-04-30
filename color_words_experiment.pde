@@ -51,6 +51,7 @@ void draw() {
   displayColorPicker();
   color currentColor = colorPicker.getColor();
 
+  displaySLIndicator();
   displayColorIndicator();
   displayColorDisplay(currentColor);
 
@@ -99,6 +100,17 @@ void displayColorIndicator()
 
   stroke(0,0,0);
   rect(colorPicker.x + colorPicker.pickedColorPosition[0], colorPicker.y + colorPicker.pickedColorPosition[1], 5, 5);
+}
+
+void displaySLIndicator()
+{
+  rectMode(CENTER);
+  noFill();
+
+  stroke(0,0,0);
+  rect(saturationBrightnessPicker.x + saturationBrightnessPicker.pickedPosition[0], saturationBrightnessPicker.y + saturationBrightnessPicker.pickedPosition[1], 5, 5);
+  
+  println(saturationBrightnessPicker.pickedPosition[0]+" | "+saturationBrightnessPicker.pickedPosition[1]);
 }
 
 void displayColorDisplay(color currentColor)

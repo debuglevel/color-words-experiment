@@ -7,12 +7,19 @@ public class SaturationBrightnessPicker
 
   float max_lumosity = 300;
 
-  int[] pickedPosition;
+  public int[] pickedPosition;
+
+  public SaturationBrightnessPicker()
+  {
+    pickedPosition = new int[2];
+    pickedPosition[0] = 0;
+    pickedPosition[1] = 0;
+  }
 
   void draw()
   {
     colorMode(HSB, TWO_PI, 1, brightnessPicker.max_lumosity);
-    
+
     // draw brightness scale
     for (int currentX = x; currentX < x+width; currentX++) {
       for (int currentY = y; currentY < y+height; currentY++)
@@ -24,7 +31,7 @@ public class SaturationBrightnessPicker
         float hue = hue(colorPicker.getColor());
         hue = wrapHue(hue);
         //println(saturation);
-        
+
         //stroke(hue, 1, 300);
         stroke(hue, saturation, brightness);
         point(currentX, currentY);
