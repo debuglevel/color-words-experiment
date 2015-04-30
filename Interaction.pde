@@ -55,8 +55,8 @@ class Interaction
     {
       CircularColorPicker circularColorPicker = (CircularColorPicker)colorPicker;
 
-      float relativePositionX = colorPicker.x - joystick.sliders.X();
-      float relativePositionY = colorPicker.y - joystick.sliders.Y();
+      float relativePositionX = joystick.sliders.X() - colorPicker.x;
+      float relativePositionY = joystick.sliders.Y() - colorPicker.y;
 
       println("X = " + relativePositionX + " | Y = " + relativePositionY);
 

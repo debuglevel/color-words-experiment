@@ -1,6 +1,6 @@
 class Joystick
 {
-  private boolean isActive = false;
+  private boolean isActive = true;
 
   private ControlIO control;
   private ControlDevice device;

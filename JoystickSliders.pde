@@ -34,16 +34,16 @@ class JoystickSliders
 
   public int X()
   {
-    float rawValue = sliderX.getValue();
-    float x = map(rawValue, -1, 1, range_X_start, range_X_end);
+    float x = sliderX.getValue();
+    x = map(x, -1, 1, range_X_start, range_X_end);
 
     return (int)x;
   }
 
   public int Y()
   {
-    float rawValue = sliderY.getValue();
-    float y = map(rawValue, -1, 1, range_Y_start, range_Y_end);
+    float y = sliderY.getValue();
+    y = map(y, -1, 1, range_Y_start, range_Y_end);
 
     return (int)y;
   }
