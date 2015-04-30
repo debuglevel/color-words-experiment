@@ -1,43 +1,15 @@
-abstract class ColorPicker
+abstract class ColorPicker extends Picker
 {
-  int x = 0;
-  int y = 100;
-  int width = window_width;
-  int height = 100;
-
-  int[] pickedColorPosition;
-
-  PGraphics image;
-
-  public ColorPicker()
+  public ColorPicker(int x, int y, int width, int height)
   {
-    pickedColorPosition = new int[2];
-    pickedColorPosition[0] = 0;
-    pickedColorPosition[1] = 0;
-  }
+    super(x, y, width, height);
 
-  public void setup()
-  {
-    image = createGraphics(width, height);
+    pickIndicator.setOffset(this.getStartX(), this.getStartY());
   }
 
   public color getColor()
   {
-    return image.get(pickedColorPosition[0], pickedColorPosition[1]);
-  }
-
-  public void setPickPositionAbsolute(int absoluteX, int absoluteY)
-  {
-    pickedColorPosition[0] = absoluteX - x;
-    pickedColorPosition[1] = absoluteY - y;
-  }
-  
-  public boolean isInRange(int absoluteX, int absoluteY)
-  {
-    return (absoluteY > colorPicker.y &&
-      absoluteY < colorPicker.y + colorPicker.height &&
-      absoluteX > colorPicker.x &&
-      absoluteX < colorPicker.x + colorPicker.width);
+    return image.get(this.pickIndicator.relativeX(), this.pickIndicator.relativeY());
   }
 
   public abstract void draw();

@@ -6,37 +6,32 @@ int window_width = 800;
 int window_height = 600;
 
 
-int max_saturation = 150;
-
 PFont instructionFont = createFont("Georgia", 32);
-
-Table table;
-String tableFile;
-
 PFont debugFont = createFont("arial", 10, false);
 
 
 ExperimentData experimentData = new ExperimentData();
 Joystick joystick = new Joystick(this);
-ColorPicker colorPicker = new HorizontalColorPicker();
+ColorPicker colorPicker = new CircularColorPicker(); //HorizontalColorPicker();
 Interaction interaction = new Interaction();
-BrightnessPicker brightnessPicker = new BrightnessPicker();
+//BrightnessPicker brightnessPicker = new BrightnessPicker();
 SaturationBrightnessPicker saturationBrightnessPicker = new SaturationBrightnessPicker();
 
 void setup() {
-  colorMode(HSB, TWO_PI, max_saturation, brightnessPicker.max_lumosity);
+  colorMode(HSB, TWO_PI, saturationBrightnessPicker.max_saturation, saturationBrightnessPicker.max_brightness);
   size(window_width, window_height);
 
   interaction.setup();
 
   //joystick.sliders.setRange(colorPicker.x, colorPicker.y, colorPicker.x + colorPicker.width, colorPicker.y + colorPicker.height);
   // reduce size of circular colorpicker to ensure that the joystick pick will always be inside (instead of being slightly outside the edge)  
-  joystick.sliders.setRange(colorPicker.x + 10, colorPicker.y + 10, colorPicker.x + colorPicker.width - 10, colorPicker.y + colorPicker.height - 10);
+  joystick.sliders.setRange(colorPicker.getStartX() + 10, colorPicker.getStartY() + 10, colorPicker.getEndX() - 10, colorPicker.getEndY() - 10);
 
   colorPicker.setup();
   colorPicker.draw();
 
-  saturationBrightnessPicker.draw();
+  //saturationBrightnessPicker.setup();
+  //saturationBrightnessPicker.draw();
 
   experimentData.initializeTable();
   experimentData.setNextColor();
@@ -48,14 +43,11 @@ void draw() {
   interaction.mouseInteraction();
   interaction.joystickInteraction();
 
-  displayColorPicker();
+  colorPicker.display();
+  //saturationBrightnessPicker.display();
   color currentColor = colorPicker.getColor();
 
-  displaySLIndicator();
-  displayColorIndicator();
   displayColorDisplay(currentColor);
-
-  //brightnessPicker.display();
 
   displayInstruction();
   displayDebugInfo(currentColor);
@@ -81,7 +73,7 @@ void displayDebugInfo(color currentColor)
   text("S:   " + ruleOfThree(saturation(currentColor), 150, 255), 10, 60);
   text("B:   " + ruleOfThree(brightness(currentColor), 300, 255), 10, 70);
 
-  text("DBG: " + brightnessPicker.lumosity, 10, 90);
+  text("DBG: " + 0, 10, 90);
 }
 
 void displayInstruction()
@@ -93,35 +85,10 @@ void displayInstruction()
   text("Bitte wähle nun " + experimentData.ColorWord + " aus.", window_width/2, 50);
 }
 
-void displayColorIndicator()
-{
-  rectMode(CENTER);
-  noFill();
-
-  stroke(0,0,0);
-  rect(colorPicker.x + colorPicker.pickedColorPosition[0], colorPicker.y + colorPicker.pickedColorPosition[1], 5, 5);
-}
-
-void displaySLIndicator()
-{
-  rectMode(CENTER);
-  noFill();
-
-  stroke(0,0,0);
-  rect(saturationBrightnessPicker.x + saturationBrightnessPicker.pickedPosition[0], saturationBrightnessPicker.y + saturationBrightnessPicker.pickedPosition[1], 5, 5);
-  
-  println(saturationBrightnessPicker.pickedPosition[0]+" | "+saturationBrightnessPicker.pickedPosition[1]);
-}
-
 void displayColorDisplay(color currentColor)
 {
   fill(currentColor);
   rect(420, 330, 40, 40);
-}
-
-void displayColorPicker()
-{
-  image(colorPicker.image, colorPicker.x, colorPicker.y);
 }
 
 float wrapHue(float hue)

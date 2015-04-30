@@ -4,25 +4,25 @@ class HorizontalColorPicker extends ColorPicker
 
   public HorizontalColorPicker()
   {
-    pickedColorPosition = new int[2];
-    pickedColorPosition[0] = (this.width / 2);
-    pickedColorPosition[1] = (this.height / 2);
+    //super(0, 100, window_width, 100);
+    super(100, 100, 100, 100);
+
+    this.pickIndicator.relativeSet(this.getWidth() / 2, this.getHeight() / 2);
   }
 
   public void draw()
   {
     image.beginDraw();
-    image.colorMode(HSB, TWO_PI, 1, brightnessPicker.max_lumosity);
+    image.colorMode(HSB, TWO_PI, saturationBrightnessPicker.max_saturation, saturationBrightnessPicker.max_brightness);
 
-    for (int x = 0; x < width; x++) {
-      float hue = ruleOfThree(x, width, colorRange);
+    for (int x = 0; x < this.getWidth (); x++) {
+      float hue = ruleOfThree(x, this.getWidth(), colorRange);
       //float hue = ruleOfThree(x, width, TWO_PI);
       hue = hue + interaction.offset;
       hue = wrapHue(hue);
-      float saturation = 1;
 
-      image.stroke(hue, saturation, brightnessPicker.max_lumosity);
-      image.line(x, 0, x, height); // way faster than point
+      image.stroke(hue, saturationBrightnessPicker.max_saturation, saturationBrightnessPicker.max_brightness);
+      image.line(x, 0, x, this.getHeight()); // way faster than point
     }
 
     image.endDraw();

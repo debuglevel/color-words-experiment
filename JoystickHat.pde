@@ -11,12 +11,12 @@ public class JoystickHat
   {
     hat = device.getHat(hatName);
   }
-  
+
   public float X()
   {
     return hat.getX();
   }
-  
+
   public float Y()
   {
     return hat.getY();

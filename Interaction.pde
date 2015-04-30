@@ -15,12 +15,9 @@ public class Interaction
 
   public void joystickHatPressed(float x, float y)
   {
-    println(x+" "+y);
-    
-    saturationBrightnessPicker.pickedPosition[0] += x; //joystick.hat.X(); 
-    saturationBrightnessPicker.pickedPosition[1] += y; //joystick.hat.Y();
-    
-    displaySLIndicator();
+    //    println(x+" "+y);
+    saturationBrightnessPicker.pickIndicator.relativeSet(saturationBrightnessPicker.pickIndicator.relativeX() + x, saturationBrightnessPicker.pickIndicator.relativeY() + y);
+    saturationBrightnessPicker.display();
   }
 
   // event
@@ -92,7 +89,7 @@ public class Interaction
       {
         if (colorPicker.isInRange(mouseX, mouseY))
         {
-          colorPicker.setPickPositionAbsolute(mouseX, mouseY);
+          colorPicker.pickIndicator.absoluteSet(mouseX, mouseY);
         }
       } else if (colorPicker instanceof CircularColorPicker)
       {
@@ -101,11 +98,11 @@ public class Interaction
         circularColorPicker.mouseMove();
       }
 
-      // brightnessPicker
-      if (brightnessPicker.isInRange(mouseX, mouseY))
-      {
-        brightnessPicker.setLumosity(mouseX, mouseY);
-      }
+      //      // brightnessPicker
+      //      if (saturationBrightnessPicker.isInRange(mouseX, mouseY))
+      //      {
+      //        saturationBrightnessPicker.setLumosity(mouseX, mouseY);
+      //      }
     }
   }
 }

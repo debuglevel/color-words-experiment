@@ -1,5 +1,8 @@
 class ExperimentData
 {
+  Table table;
+  String tableFile;
+
   String VP_ID = "Undefined";
   String ColorWord = "Undefined";
   int Iteration = 1;

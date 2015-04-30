@@ -1,42 +1,46 @@
-public class SaturationBrightnessPicker
+public class SaturationBrightnessPicker extends Picker
 {
-  int x = 100;
-  int y = 200;
-  int width = 200;
-  int height = 200;
-
-  float max_lumosity = 300;
-
-  public int[] pickedPosition;
+  private float max_brightness = 1;
+  private float max_saturation = 1;
 
   public SaturationBrightnessPicker()
   {
-    pickedPosition = new int[2];
-    pickedPosition[0] = 0;
-    pickedPosition[1] = 0;
+    //    int x = 100;
+    //    int y = 200;
+    //    int width = 200;
+    //    int height = 200;
+    super(333, 333, 200, 200);
+
+    pickIndicator.setOffset(this.getStartX(), this.getStartY());
   }
 
-  void draw()
+  public void draw()
   {
-    colorMode(HSB, TWO_PI, 1, brightnessPicker.max_lumosity);
+    this.drawScale();
+  }
+
+  private void drawScale()
+  {
+    image.beginDraw();
+    image.colorMode(HSB, TWO_PI, saturationBrightnessPicker.max_saturation, saturationBrightnessPicker.max_brightness);
 
     // draw brightness scale
-    for (int currentX = x; currentX < x+width; currentX++) {
-      for (int currentY = y; currentY < y+height; currentY++)
+    for (int currentX = this.getStartX (); currentX < this.getEndX(); currentX++) 
+    {
+      for (int currentY = this.getStartY (); currentY < this.getEndY(); currentY++)
       {
-
-        float brightness = ruleOfThree(currentX-x, width, max_lumosity);
-        float saturation = ruleOfThree(currentY-y, height, 1);
+        float brightness = ruleOfThree(currentX-this.getStartX(), this.getWidth(), max_brightness);
+        float saturation = ruleOfThree(currentY-this.getStartY(), this.getHeight(), max_saturation);
 
         float hue = hue(colorPicker.getColor());
         hue = wrapHue(hue);
-        //println(saturation);
 
-        //stroke(hue, 1, 300);
-        stroke(hue, saturation, brightness);
-        point(currentX, currentY);
+        image.stroke(hue, saturation, brightness);
+        image.point(currentX, currentY);
       }
     }
+
+    image.endDraw();
   }
 }
 

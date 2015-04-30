@@ -27,7 +27,7 @@ class Joystick
 
     sliders.device = device;
     sliders.setSliders("X-Achse", "Y-Achse");
-    
+
     hat.device = device;
     hat.setHat("cooliehat: Mehrwegeschalter");
   }
