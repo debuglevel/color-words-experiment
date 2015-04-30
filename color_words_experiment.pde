@@ -30,8 +30,8 @@ void setup() {
   colorPicker.setup();
   colorPicker.draw();
 
-  //saturationBrightnessPicker.setup();
-  //saturationBrightnessPicker.draw();
+  saturationBrightnessPicker.setup();
+  saturationBrightnessPicker.draw();
 
   experimentData.initializeTable();
   experimentData.setNextColor();
@@ -44,7 +44,7 @@ void draw() {
   interaction.joystickInteraction();
 
   colorPicker.display();
-  //saturationBrightnessPicker.display();
+  saturationBrightnessPicker.display();
   color currentColor = colorPicker.getColor();
 
   displayColorDisplay(currentColor);

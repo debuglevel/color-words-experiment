@@ -5,7 +5,7 @@ class CircularColorPicker extends ColorPicker
 
   public CircularColorPicker()
   {
-    super(100, 100, 500, 500);
+    super(100, 100, 100, 100);
   }
 
   public void draw() { 
