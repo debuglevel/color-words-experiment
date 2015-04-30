@@ -1,7 +1,7 @@
 class Interaction
 {
   float offset = 0;
-  
+
   // event
   void keyPressed() {
     //println("Key pressed");
@@ -36,7 +36,7 @@ class Interaction
       selectOutput("Output file where filename equals the VP_ID", "fileSelected");
     }
   }
-  
+
   void joystickInteraction()
   {
     if (joystick.isActive == false)
@@ -55,16 +55,7 @@ class Interaction
     {
       CircularColorPicker circularColorPicker = (CircularColorPicker)colorPicker;
 
-      float relativePositionX = joystick.sliders.X() - colorPicker.x;
-      float relativePositionY = joystick.sliders.Y() - colorPicker.y;
-
-      println("X = " + relativePositionX + " | Y = " + relativePositionY);
-
-      float distance = dist(relativePositionX, relativePositionY, circularColorPicker.outerRadius, circularColorPicker.outerRadius);
-
-      if (distance < circularColorPicker.outerRadius && distance > circularColorPicker.innerRadius) {
-        colorPicker.setPickPositionAbsolute(joystick.sliders.X(), joystick.sliders.Y());
-      }
+      circularColorPicker.joystickMove();
     }
   }
 
@@ -82,16 +73,7 @@ class Interaction
       {
         CircularColorPicker circularColorPicker = (CircularColorPicker)colorPicker;
 
-
-        float relativePositionX = mouseX - colorPicker.x;
-        float relativePositionY = mouseY - colorPicker.y;
-
-        // calulcate saturation by distance from the middle
-        float distance = dist(relativePositionX, relativePositionY, circularColorPicker.outerRadius, circularColorPicker.outerRadius);
-
-        if (distance < circularColorPicker.outerRadius && distance > circularColorPicker.innerRadius) {
-          colorPicker.setPickPositionAbsolute(mouseX, mouseY);
-        }
+        circularColorPicker.mouseMove();
       }
 
       // brightnessPicker

@@ -2,7 +2,7 @@ class CircularColorPicker extends ColorPicker
 {
   int outerRadius = width / 2;
   int innerRadius = outerRadius / 2;
-  
+
   public void draw() { 
     image.beginDraw();
     image.colorMode(HSB, TWO_PI, 1, brightnessPicker.max_lumosity);
@@ -24,6 +24,33 @@ class CircularColorPicker extends ColorPicker
     }
 
     image.endDraw();
+  }
+
+  public void joystickMove()
+  {
+    float relativePositionX = joystick.sliders.X() - colorPicker.x;
+    float relativePositionY = joystick.sliders.Y() - colorPicker.y;
+
+//    println("X = " + relativePositionX + " | Y = " + relativePositionY);
+
+    float distance = dist(relativePositionX, relativePositionY, this.outerRadius, this.outerRadius);
+
+    if (distance < this.outerRadius && distance > this.innerRadius) {
+      colorPicker.setPickPositionAbsolute(joystick.sliders.X(), joystick.sliders.Y());
+    }
+  }
+
+  public void mouseMove()
+  {
+    float relativePositionX = mouseX - colorPicker.x;
+    float relativePositionY = mouseY - colorPicker.y;
+
+    // calulcate saturation by distance from the middle
+    float distance = dist(relativePositionX, relativePositionY, this.outerRadius, this.outerRadius);
+
+    if (distance < this.outerRadius && distance > this.innerRadius) {
+      colorPicker.setPickPositionAbsolute(mouseX, mouseY);
+    }
   }
 }
 
