@@ -20,8 +20,8 @@ class JoystickSliders
     sliderY = device.getSlider(sliderNameY);
 
     // set tolerance to some value, as a joystick slider will probably never be exact 0.00
-    sliderX.setTolerance(0.05);
-    sliderY.setTolerance(0.05);
+    sliderX.setTolerance(0.1);
+    sliderY.setTolerance(0.1);
   }
 
   public void setRange(int x_start, int y_start, int x_end, int y_end)

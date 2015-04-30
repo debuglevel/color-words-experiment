@@ -5,7 +5,7 @@ public abstract class Picker
   private int width;
   private int height;
 
-  public PickIndicator pickIndicator = new PickIndicator();
+  public PickIndicator pickIndicator = new PickIndicator(this);
 
   public PGraphics image;
 
@@ -37,7 +37,7 @@ public abstract class Picker
     image(this.image, this.getStartX(), this.getStartY());
   }
 
-  public boolean isInRange(int absoluteX, int absoluteY)
+  public boolean isInRange(float absoluteX, float absoluteY)
   {
     return (absoluteY >= this.getStartY() &&
       absoluteY <= this.getEndY() &&

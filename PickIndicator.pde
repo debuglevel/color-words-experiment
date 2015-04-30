@@ -2,9 +2,12 @@ public class PickIndicator
 {
   private int[] offset;
   private float[] position;
+  private Picker picker;
 
-  public PickIndicator()
+  public PickIndicator(Picker picker)
   {
+    this.picker = picker;
+    
     position = new float[2];
     position[0] = 0;
     position[1] = 0;
@@ -30,28 +33,61 @@ public class PickIndicator
 
   public void absoluteSet(float x, float y)
   {
-    this.position[0] = x - this.offset[0];
-    this.position[1] = y - this.offset[1];
+    println("absolute set X="+x+" Y="+y);
 
-    this.display();
+    float currentX = absoluteXf();
+    float currentY = absoluteYf();
+    float newX = x;
+    float newY = y;
+
+    if (picker.isInRange(newX, currentY))
+    {
+      println("x");
+      this.position[0] = x - float(this.offset[0]);
+    }
+
+    if (picker.isInRange(newY, currentX))
+    {
+      println("y");
+      this.position[1] = y - float(this.offset[1]);
+    }
   }
 
   public void relativeSet(float x, float y)
   {
-    this.position[0] = x;
-    this.position[1] = y;
-
-    this.display();
+    println("reativeSet X="+x+" Y="+y);
+    
+    this.absoluteSet(this.offset[0] + x, this.offset[1] + y);
   }
 
+  public void change(float x, float y)
+  {
+    //println("change X="+x+" Y="+y);
+    
+    float currentX = absoluteXf();
+    float currentY = absoluteYf();
+
+    this.absoluteSet(currentX + x, currentY + y);
+  }
+
+  public float absoluteXf()
+  {
+    return this.offset[0] + this.position[0];
+  }
+  
   public int absoluteX()
   {
-    return int(this.offset[0] + this.position[0]);
+    return int(absoluteXf());
   }
 
+  public float absoluteYf()
+  {
+    return this.offset[1] + this.position[1];
+  }
+  
   public int absoluteY()
   {
-    return int(this.offset[1] + this.position[1]);
+    return int(absoluteYf());
   }
 
   public int relativeX()

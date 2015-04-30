@@ -14,16 +14,12 @@ public class Interaction
   }
 
   public void joystickHatPressed(float x, float y)
-  {
-    //    println(x+" "+y);
-    saturationBrightnessPicker.pickIndicator.relativeSet(saturationBrightnessPicker.pickIndicator.relativeX() + x, saturationBrightnessPicker.pickIndicator.relativeY() + y);
-    saturationBrightnessPicker.display();
+  { 
+    saturationBrightnessPicker.pickIndicator.change(x, y);
   }
 
   // event
   void keyPressed() {
-    //println("Key pressed");
-
     if (key == CODED) 
     {
       if (keyCode == LEFT) 
@@ -44,8 +40,6 @@ public class Interaction
   }
 
   void keyTyped() {
-    //println("Key: typed " + int(key) + " " + keyCode);
-
     if (key == RETURN || key == ENTER)
     {
       //println("Key: Return/Enter");

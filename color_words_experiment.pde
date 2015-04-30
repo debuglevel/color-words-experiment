@@ -88,7 +88,7 @@ void displayInstruction()
 void displayColorDisplay(color currentColor)
 {
   fill(currentColor);
-  rect(420, 330, 40, 40);
+  rect(0, 400, 40, 40);
 }
 
 float wrapHue(float hue)
