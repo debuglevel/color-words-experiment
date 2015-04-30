@@ -21,6 +21,7 @@ Joystick joystick = new Joystick(this);
 ColorPicker colorPicker = new HorizontalColorPicker();
 Interaction interaction = new Interaction();
 BrightnessPicker brightnessPicker = new BrightnessPicker();
+SaturationBrightnessPicker saturationBrightnessPicker = new SaturationBrightnessPicker();
 
 void setup() {
   colorMode(HSB, TWO_PI, max_saturation, brightnessPicker.max_lumosity);
@@ -34,6 +35,8 @@ void setup() {
 
   colorPicker.setup();
   colorPicker.draw();
+
+  saturationBrightnessPicker.draw();
 
   experimentData.initializeTable();
   experimentData.setNextColor();
@@ -51,7 +54,7 @@ void draw() {
   displayColorIndicator();
   displayColorDisplay(currentColor);
 
-  brightnessPicker.display();
+  //brightnessPicker.display();
 
   displayInstruction();
   displayDebugInfo(currentColor);
@@ -94,6 +97,7 @@ void displayColorIndicator()
   rectMode(CENTER);
   noFill();
 
+  stroke(0,0,0);
   rect(colorPicker.x + colorPicker.pickedColorPosition[0], colorPicker.y + colorPicker.pickedColorPosition[1], 5, 5);
 }
 
