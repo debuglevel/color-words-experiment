@@ -1,6 +1,16 @@
-class Interaction
+public class Interaction
 {
   float offset = 0;
+
+  void setup()
+  {
+    joystick.button.plug(this, "joystickButtonPressed", ControlIO.ON_RELEASE);
+  }
+
+  public void joystickButtonPressed()
+  {
+    experimentData.enterColor(colorPicker.getColor());
+  }
 
   // event
   void keyPressed() {
@@ -17,7 +27,7 @@ class Interaction
       }
     }
   }
-  
+
   void changeOffset(float offset)
   {
     interaction.offset += offset;

@@ -26,6 +26,8 @@ void setup() {
   colorMode(HSB, TWO_PI, max_saturation, brightnessPicker.max_lumosity);
   size(window_width, window_height);
 
+  interaction.setup();
+
   //joystick.sliders.setRange(colorPicker.x, colorPicker.y, colorPicker.x + colorPicker.width, colorPicker.y + colorPicker.height);
   // reduce size of circular colorpicker to ensure that the joystick pick will always be inside (instead of being slightly outside the edge)  
   joystick.sliders.setRange(colorPicker.x + 10, colorPicker.y + 10, colorPicker.x + colorPicker.width - 10, colorPicker.y + colorPicker.height - 10);
