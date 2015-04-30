@@ -17,5 +17,10 @@ class HorizontalColorPicker extends ColorPicker
 
     image.endDraw();
   }
+
+  public void joystickMove()
+  {
+    interaction.changeOffset(joystick.sliders.rawX() / 5.0);
+  }
 }
 

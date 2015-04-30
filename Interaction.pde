@@ -10,14 +10,18 @@ class Interaction
     {
       if (keyCode == LEFT) 
       {
-        offset -= 0.1;
+        changeOffset(-0.1);
       } else if (keyCode == RIGHT) 
       {
-        offset += 0.1;
+        changeOffset(+0.1);
       }
-
-      colorPicker.draw();
     }
+  }
+  
+  void changeOffset(float offset)
+  {
+    interaction.offset += offset;
+    colorPicker.draw();
   }
 
   void keyTyped() {
@@ -47,10 +51,9 @@ class Interaction
     // colorPicker
     if (colorPicker instanceof HorizontalColorPicker)
     {
-      if (colorPicker.isInRange(mouseX, mouseY))
-      {
-        colorPicker.setPickPositionAbsolute(mouseX, mouseY);
-      }
+      HorizontalColorPicker horizontalColorPicker = (HorizontalColorPicker)colorPicker;
+
+      horizontalColorPicker.joystickMove();
     } else if (colorPicker instanceof CircularColorPicker)
     {
       CircularColorPicker circularColorPicker = (CircularColorPicker)colorPicker;

@@ -2,7 +2,7 @@ abstract class ColorPicker
 {
   int x = 0;
   int y = 100;
-  int width = 100;
+  int width = window_width;
   int height = 100;
 
   int[] pickedColorPosition;

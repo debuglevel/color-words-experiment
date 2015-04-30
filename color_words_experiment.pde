@@ -18,7 +18,7 @@ PFont debugFont = createFont("arial", 10, false);
 
 ExperimentData experimentData = new ExperimentData();
 Joystick joystick = new Joystick(this);
-ColorPicker colorPicker = new CircularColorPicker();
+ColorPicker colorPicker = new HorizontalColorPicker();
 Interaction interaction = new Interaction();
 BrightnessPicker brightnessPicker = new BrightnessPicker();
 
