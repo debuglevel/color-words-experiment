@@ -63,7 +63,7 @@ float ruleOfThree(float value, float oldMax, float newMax) {
 
 void displayDebugInfo(color currentColor)
 {
-  if (false)
+  if (true)
   {
     return;
   }
@@ -72,12 +72,12 @@ void displayDebugInfo(color currentColor)
   textFont(debugFont);
   fill(0, 0, 255);
 
-  text("R:   " + ruleOfThree(red(currentColor), TWO_PI, 255), 10, 20);
-  text("G:   " + ruleOfThree(green(currentColor), 150, 255), 10, 30);
-  text("B:   " + ruleOfThree(blue(currentColor), 300, 255), 10, 40);
+  text("R:   " + ruleOfThree(red(currentColor), TWO_PI, 1), 10, 20);
+  text("G:   " + ruleOfThree(green(currentColor), 1, 1), 10, 30);
+  text("B:   " + ruleOfThree(blue(currentColor), 1, 1), 10, 40);
 
-  text("S:   " + ruleOfThree(saturation(currentColor), 150, 255), 10, 60);
-  text("B:   " + ruleOfThree(brightness(currentColor), 300, 255), 10, 70);
+  text("S:   " + saturation(currentColor), 10, 60);
+  text("B:   " + brightness(currentColor), 10, 70);
 
   text("DBG: " + 0, 10, 90);
 }
