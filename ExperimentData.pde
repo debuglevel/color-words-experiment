@@ -8,6 +8,8 @@ class ExperimentData
   int Iteration = 1;
   int Sequence = 1;
 
+  Calendar nextIterationBegin = Calendar.getInstance();
+
   String[] colorWords = { 
     "Rot", "Grün", "Blau", "Gelb", "Schwarz", "Weiß"
   };
@@ -17,6 +19,29 @@ class ExperimentData
   ExperimentData()
   {
   }
+
+  private void setIterationSeparator()
+  {
+    this.nextIterationBegin = Calendar.getInstance();
+    nextIterationBegin.add(Calendar.SECOND, 5);
+  }
+
+  public void displayIterationSeparator()
+  {
+    Calendar now = Calendar.getInstance();
+
+    if (now.compareTo(nextIterationBegin) < 0)
+    {
+      rectMode(CORNER);
+      fill(0, 0, 0);
+      rect(0, 0, window_width, window_height);
+
+      textFont(instructionFont);
+      textAlign(CENTER);
+      fill(0, 0, 255);
+      text("Bitte warte kurz...", window_width/2, window_height/2);
+    }
+  } 
 
   String getRandomColorWord()
   {
@@ -59,11 +84,12 @@ class ExperimentData
 
   void nextIteration()
   {
-    //println("New Iteration started.");
+    println("New Iteration started.");
     usedColors = new StringList();
     this.Sequence = 1;
     this.Iteration++;
     this.setNextColor();
+    this.setIterationSeparator();
   }
 
   void nextStep()

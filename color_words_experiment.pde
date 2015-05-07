@@ -1,6 +1,7 @@
 import org.gamecontrolplus.gui.*;
 import org.gamecontrolplus.*;
 import net.java.games.input.*;
+import java.util.Calendar;
 
 int window_width = 800;
 int window_height = 600;
@@ -52,6 +53,8 @@ void draw() {
 
   displayInstruction();
   displayDebugInfo(currentColorSaturationBrightness);
+  
+  experimentData.displayIterationSeparator();
 }
 
 float ruleOfThree(float value, float oldMax, float newMax) {
