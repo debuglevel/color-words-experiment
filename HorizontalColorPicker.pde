@@ -4,8 +4,8 @@ class HorizontalColorPicker extends ColorPicker
 
   public HorizontalColorPicker()
   {
-    //super(0, 100, window_width, 100);
-    super(100, 100, 100, 100);
+    super(0, 100, window_width, 100);
+    //super(100, 100, 100, 100);
 
     this.pickIndicator.relativeSet(this.getWidth() / 2, this.getHeight() / 2);
   }
