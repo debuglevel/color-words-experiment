@@ -15,6 +15,11 @@ public class SaturationBrightnessPicker extends Picker
     pickIndicator.setOffset(this.getStartX(), this.getStartY());
   }
 
+  public color getColorSaturationBrightness()
+  {
+    return image.get(this.pickIndicator.relativeX(), this.pickIndicator.relativeY());
+  }
+
   public void draw()
   {
     image.beginDraw();
@@ -22,7 +27,7 @@ public class SaturationBrightnessPicker extends Picker
 
     float hue = hue(colorPicker.getColor());
     hue = wrapHue(hue);
-    
+
     int width = this.getWidth();
     int height = this.getHeight();
 
@@ -31,7 +36,7 @@ public class SaturationBrightnessPicker extends Picker
       for (int y = 0; y <= height; y++) {
         float brightness = ruleOfThree(x, width, max_brightness);
         float saturation = ruleOfThree(y, height, max_saturation);
-        
+
         saturation = max_saturation - saturation; // place max saturation on the top instead of on the bottom
 
         image.stroke(hue, saturation, brightness);

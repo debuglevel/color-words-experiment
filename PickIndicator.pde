@@ -44,12 +44,14 @@ public class PickIndicator
     {
       //println("PickIndicator.absoluteSet: x is in range");
       this.position[0] = x - float(this.offset[0]);
+      this.position[0] = constrain(this.position[0], 0, picker.getWidth());
     }
 
     if (picker.isInRange(currentX, newY))
     {
       //println("PickIndicator.absoluteSet: y is in range");
       this.position[1] = y - float(this.offset[1]);
+      this.position[1] = constrain(this.position[1], 0, picker.getHeight());
     }
   }
 

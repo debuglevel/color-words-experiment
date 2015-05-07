@@ -46,11 +46,12 @@ void draw() {
   colorPicker.display();
   saturationBrightnessPicker.display();
   color currentColor = colorPicker.getColor();
+  color currentColorSaturationBrightness = saturationBrightnessPicker.getColorSaturationBrightness();
 
-  displayColorDisplay(currentColor);
+  displayColorDisplay(currentColorSaturationBrightness);
 
   displayInstruction();
-  displayDebugInfo(currentColor);
+  displayDebugInfo(currentColorSaturationBrightness);
 }
 
 float ruleOfThree(float value, float oldMax, float newMax) {
@@ -62,7 +63,7 @@ float ruleOfThree(float value, float oldMax, float newMax) {
 
 void displayDebugInfo(color currentColor)
 {
-  if (true)
+  if (false)
   {
     return;
   }
