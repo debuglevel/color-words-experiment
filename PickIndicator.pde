@@ -17,7 +17,7 @@ public class PickIndicator
 
   public void setOffset(int x, int y)
   {
-    println("set offset: X="+x+" Y="+y);
+    //println("set offset: X="+x+" Y="+y);
     offset[0] = x;
     offset[1] = y;
   }
@@ -33,7 +33,7 @@ public class PickIndicator
 
   public void absoluteSet(float x, float y)
   {
-    println("absolute set X="+x+" Y="+y);
+    //println("absolute set X="+x+" Y="+y);
 
     float currentX = absoluteXf();
     float currentY = absoluteYf();
@@ -42,20 +42,20 @@ public class PickIndicator
 
     if (picker.isInRange(newX, currentY))
     {
-      println("x");
+      //println("x");
       this.position[0] = x - float(this.offset[0]);
     }
 
     if (picker.isInRange(newY, currentX))
     {
-      println("y");
+      //println("y");
       this.position[1] = y - float(this.offset[1]);
     }
   }
 
   public void relativeSet(float x, float y)
   {
-    println("reativeSet X="+x+" Y="+y);
+    //println("reativeSet X="+x+" Y="+y);
     
     this.absoluteSet(this.offset[0] + x, this.offset[1] + y);
   }
