@@ -10,7 +10,7 @@ public class Interaction
 
   public void joystickButtonPressed()
   {
-    experimentData.enterColor(colorPicker.getColor());
+    experimentData.enterColor(saturationBrightnessPicker.getColorSaturationBrightness());
   }
 
   public void joystickHatPressed(float x, float y)
@@ -43,7 +43,7 @@ public class Interaction
     if (key == RETURN || key == ENTER)
     {
       //println("Key: Return/Enter");
-      experimentData.enterColor(colorPicker.getColor());
+      experimentData.enterColor(saturationBrightnessPicker.getColorSaturationBrightness());
     } else if (key == TAB)
     {
       //println("Key: Tab");

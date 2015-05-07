@@ -85,7 +85,7 @@ class ExperimentData
     printDebug();
   }
 
-  void fileSelected(File selection) {
+  public void fileSelected(File selection) {
     if (selection == null) {
       println("Window was closed or the user hit cancel.");
     } else {

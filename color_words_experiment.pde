@@ -67,7 +67,7 @@ void displayDebugInfo(color currentColor)
   {
     return;
   }
-  
+
   textAlign(LEFT);
   textFont(debugFont);
   fill(0, 0, 255);
@@ -97,10 +97,10 @@ void displayColorDisplay(color currentColor)
   int y = 220;
   int width = 200;
   int height = 200;
-  
+
   rectMode(CORNER);
   fill(currentColor);
-  stroke(0,0,0);
+  stroke(0, 0, 0);
   rect(x, y, width, height);
 }
 
@@ -133,5 +133,9 @@ void keyPressed() {
 
 void keyTyped() {
   interaction.keyTyped();
+}
+
+public void fileSelected(File selection) {
+  experimentData.fileSelected(selection);
 }
 
