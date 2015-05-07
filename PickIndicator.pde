@@ -33,7 +33,7 @@ public class PickIndicator
 
   public void absoluteSet(float x, float y)
   {
-    //println("absolute set X="+x+" Y="+y);
+    println("PickIndicator.absoluteSet (x="+x+", x="+y+")");
 
     float currentX = absoluteXf();
     float currentY = absoluteYf();
@@ -42,13 +42,13 @@ public class PickIndicator
 
     if (picker.isInRange(newX, currentY))
     {
-      //println("x");
+      //println("PickIndicator.absoluteSet: x is in range");
       this.position[0] = x - float(this.offset[0]);
     }
 
-    if (picker.isInRange(newY, currentX))
+    if (picker.isInRange(currentX, newY))
     {
-      //println("y");
+      //println("PickIndicator.absoluteSet: y is in range");
       this.position[1] = y - float(this.offset[1]);
     }
   }
@@ -62,7 +62,7 @@ public class PickIndicator
 
   public void change(float x, float y)
   {
-    //println("change X="+x+" Y="+y);
+    //println("PickIndicator.change(x="+x+" y="+y+")");
     
     float currentX = absoluteXf();
     float currentY = absoluteYf();
@@ -72,7 +72,9 @@ public class PickIndicator
 
   public float absoluteXf()
   {
-    return this.offset[0] + this.position[0];
+    float val = this.offset[0] + this.position[0];
+    //println("absoluteXf() = " + val);
+    return val;
   }
   
   public int absoluteX()
@@ -82,7 +84,9 @@ public class PickIndicator
 
   public float absoluteYf()
   {
-    return this.offset[1] + this.position[1];
+    float val = this.offset[1] + this.position[1];
+    //println("absoluteXf() = " + val);
+    return val; 
   }
   
   public int absoluteY()

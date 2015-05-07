@@ -39,10 +39,16 @@ public abstract class Picker
 
   public boolean isInRange(float absoluteX, float absoluteY)
   {
-    return (absoluteY >= this.getStartY() &&
+    //println("Picker.IsInRange (absoluteX = " + absoluteX + " absoluteY = " + absoluteY + ")");
+
+    boolean val = (absoluteY >= this.getStartY() &&
       absoluteY <= this.getEndY() &&
       absoluteX >= this.getStartX() &&
       absoluteX <= this.getEndX());
+
+    //println("Picker.IsInRange: " + val);
+
+    return val;
   }
 
   public int getStartX()
