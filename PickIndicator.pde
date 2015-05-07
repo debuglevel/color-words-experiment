@@ -33,7 +33,7 @@ public class PickIndicator
 
   public void absoluteSet(float x, float y)
   {
-    println("PickIndicator.absoluteSet (x="+x+", x="+y+")");
+    //println("PickIndicator.absoluteSet (x="+x+", x="+y+")");
 
     float currentX = absoluteXf();
     float currentY = absoluteYf();

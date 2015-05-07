@@ -62,6 +62,11 @@ float ruleOfThree(float value, float oldMax, float newMax) {
 
 void displayDebugInfo(color currentColor)
 {
+  if (true)
+  {
+    return;
+  }
+  
   textAlign(LEFT);
   textFont(debugFont);
   fill(0, 0, 255);
@@ -87,8 +92,15 @@ void displayInstruction()
 
 void displayColorDisplay(color currentColor)
 {
+  int x = 420;
+  int y = 220;
+  int width = 200;
+  int height = 200;
+  
+  rectMode(CORNER);
   fill(currentColor);
-  rect(0, 400, 40, 40);
+  stroke(0,0,0);
+  rect(x, y, width, height);
 }
 
 float wrapHue(float hue)
