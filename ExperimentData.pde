@@ -8,6 +8,8 @@ class ExperimentData
   int Iteration = 1;
   int Sequence = 1;
 
+  int MaxIterations = 3;
+
   Calendar nextIterationBegin = Calendar.getInstance();
 
   String[] colorWords = { 
@@ -30,18 +32,28 @@ class ExperimentData
   {
     Calendar now = Calendar.getInstance();
 
-    if (now.compareTo(nextIterationBegin) < 0)
+    boolean isWaiting = now.compareTo(nextIterationBegin) < 0;
+    boolean isEnded = Iteration > MaxIterations;
+
+    if (isWaiting || isEnded)
     {
       rectMode(CORNER);
       fill(0, 0, 0);
       rect(0, 0, window_width, window_height);
+    }
 
-      textFont(instructionFont);
-      textAlign(CENTER);
-      fill(0, 0, 255);
+    textFont(instructionFont);
+    textAlign(CENTER);
+    fill(0, 0, 255);
+    if (isEnded)
+    {
+      text("Experiment vorbei. Vielen Dank!\nBitte wende Dich nun an die Versuchsleitung.", window_width/2, window_height/2);
+    } else if (isWaiting)
+    {
       text("Bitte warte kurz...", window_width/2, window_height/2);
     }
-  } 
+  }
+
 
   String getRandomColorWord()
   {
