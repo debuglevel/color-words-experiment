@@ -4,10 +4,12 @@ public class PickIndicator
   private float[] position;
   private Picker picker;
 
+  private boolean isDisplayed = false;
+
   public PickIndicator(Picker picker)
   {
     this.picker = picker;
-    
+
     position = new float[2];
     position[0] = 0;
     position[1] = 0;
@@ -24,11 +26,14 @@ public class PickIndicator
 
   public void display()
   {
-    rectMode(CENTER);
-    noFill();
+    if (isDisplayed)
+    {
+      rectMode(CENTER);
+      noFill();
 
-    stroke(0, 0, saturationBrightnessPicker.max_brightness);
-    rect(this.absoluteX(), this.absoluteY(), 5, 5);
+      stroke(0, 0, saturationBrightnessPicker.max_brightness);
+      rect(this.absoluteX(), this.absoluteY(), 5, 5);
+    }
   }
 
   public void absoluteSet(float x, float y)
@@ -46,7 +51,7 @@ public class PickIndicator
       this.position[0] = x - float(this.offset[0]);
       //println("x = "+this.position[0]);
     }
-    
+
     // constrain to 1 px less to ensure that picker is inside frame 
     this.position[0] = constrain(this.position[0], 0, picker.getWidth()-1);
 
@@ -57,7 +62,7 @@ public class PickIndicator
       this.position[1] = y - float(this.offset[1]);
       //println("y = "+this.position[1]);
     }
-    
+
     // constrain to 1 px less to ensure that picker is inside frame
     this.position[1] = constrain(this.position[1], 0, picker.getHeight()-1);
   }
@@ -65,14 +70,14 @@ public class PickIndicator
   public void relativeSet(float x, float y)
   {
     //println("reativeSet X="+x+" Y="+y);
-    
+
     this.absoluteSet(this.offset[0] + x, this.offset[1] + y);
   }
 
   public void change(float x, float y)
   {
     //println("PickIndicator.change(x="+x+" y="+y+")");
-    
+
     float currentX = absoluteXf();
     float currentY = absoluteYf();
 
@@ -85,7 +90,7 @@ public class PickIndicator
     //println("absoluteXf() = " + val);
     return val;
   }
-  
+
   public int absoluteX()
   {
     return int(absoluteXf());
@@ -95,9 +100,9 @@ public class PickIndicator
   {
     float val = this.offset[1] + this.position[1];
     //println("absoluteXf() = " + val);
-    return val; 
+    return val;
   }
-  
+
   public int absoluteY()
   {
     return int(absoluteYf());
