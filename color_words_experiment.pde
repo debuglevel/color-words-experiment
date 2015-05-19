@@ -32,20 +32,21 @@ void setup() {
   colorPicker.draw();
 
   saturationBrightnessPicker.setup();
-  saturationBrightnessPicker.draw();
+  //saturationBrightnessPicker.draw();
 
   experimentData.initializeTable();
   experimentData.setNextColor();
 }
 
 void draw() {
-  background(0);
+  //background(0);
+  background(0,0,0.5);
 
   interaction.mouseInteraction();
   interaction.joystickInteraction();
 
   colorPicker.display();
-  saturationBrightnessPicker.display();
+  //saturationBrightnessPicker.display();
   color currentColor = colorPicker.getColor();
   color currentColorSaturationBrightness = saturationBrightnessPicker.getColorSaturationBrightness();
 
@@ -96,14 +97,19 @@ void displayInstruction()
 
 void displayColorDisplay(color currentColor)
 {
-  int x = 420;
+//  int x = 420;
+//  int y = 220;
+//  int width = 200;
+//  int height = 200;
+
+  int x = width/2-100;
   int y = 220;
   int width = 200;
   int height = 200;
 
   rectMode(CORNER);
   fill(currentColor);
-  stroke(0, 0, 0);
+  stroke(0, 0, 0.5);
   rect(x, y, width, height);
 }
 
