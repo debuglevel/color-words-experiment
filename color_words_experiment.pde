@@ -3,8 +3,8 @@ import org.gamecontrolplus.*;
 import net.java.games.input.*;
 import java.util.Calendar;
 
-int window_width = 1360;
-int window_height = 760;
+int window_width = 1680;
+int window_height = 1050;
 
 
 PFont instructionFont = createFont("Georgia", 32);
@@ -37,7 +37,7 @@ void setup() {
   colorPicker.draw();
 
   saturationBrightnessPicker.setup();
-  //saturationBrightnessPicker.draw();
+  saturationBrightnessPicker.draw();
 
   experimentData.initializeTable();
   experimentData.setNextColor();

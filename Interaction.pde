@@ -36,7 +36,7 @@ public class Interaction
   {
     interaction.offset += offset;
     colorPicker.draw();
-    saturationBrightnessPicker.draw();
+    //saturationBrightnessPicker.draw();
   }
 
   void keyTyped() {
