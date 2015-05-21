@@ -114,7 +114,7 @@ void displayColorDisplay(color currentColor)
 
   rectMode(CORNER);
   fill(currentColor);
-  stroke(0, 0, 0.5);
+  stroke(0, 0, 0, 1);
   rect(x, y, width, height);
 }
 
