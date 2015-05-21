@@ -38,7 +38,7 @@ class ExperimentData
     if (isWaiting || isEnded)
     {
       rectMode(CORNER);
-      fill(0, 0, 0);
+      fill(0, 0, 0.8);
       rect(0, 0, window_width, window_height);
     }
 

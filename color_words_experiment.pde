@@ -3,8 +3,8 @@ import org.gamecontrolplus.*;
 import net.java.games.input.*;
 import java.util.Calendar;
 
-int window_width = 800;
-int window_height = 600;
+int window_width = 1360;
+int window_height = 760;
 
 
 PFont instructionFont = createFont("Georgia", 32);
@@ -18,8 +18,13 @@ Interaction interaction = new Interaction();
 //BrightnessPicker brightnessPicker = new BrightnessPicker();
 SaturationBrightnessPicker saturationBrightnessPicker = new SaturationBrightnessPicker();
 
+boolean sketchFullScreen() {
+  return true;
+}
+
 void setup() {
   colorMode(HSB, TWO_PI, saturationBrightnessPicker.max_saturation, saturationBrightnessPicker.max_brightness);
+  //size(displayWidth, displayHeight);
   size(window_width, window_height);
 
   interaction.setup();
@@ -40,7 +45,7 @@ void setup() {
 
 void draw() {
   //background(0);
-  background(0,0,0.5);
+  background(0,0,0.8);
 
   interaction.mouseInteraction();
   interaction.joystickInteraction();
@@ -90,9 +95,9 @@ void displayInstruction()
 {
   textFont(instructionFont);
   textAlign(CENTER);
-  fill(0, 0, 255);
+  fill(0, 0, 0.3);
 
-  text("Bitte wähle nun " + experimentData.ColorWord + " aus.", window_width/2, 50);
+  text("Bitte wähle nun " + experimentData.ColorWord + " aus.", window_width/2, 100);
 }
 
 void displayColorDisplay(color currentColor)
@@ -103,7 +108,7 @@ void displayColorDisplay(color currentColor)
 //  int height = 200;
 
   int x = width/2-100;
-  int y = 220;
+  int y = 400;
   int width = 200;
   int height = 200;
 
