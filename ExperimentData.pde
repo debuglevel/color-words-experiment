@@ -44,7 +44,7 @@ class ExperimentData
 
     textFont(instructionFont);
     textAlign(CENTER);
-    fill(0, 0, 255);
+    fill(0, 0, 0.3);
     if (isEnded)
     {
       text("Experiment vorbei. Vielen Dank!\nBitte wende Dich nun an die Versuchsleitung.", window_width/2, window_height/2);
